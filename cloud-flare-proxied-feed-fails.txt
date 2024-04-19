@@ -1,0 +1,5 @@
+Hello, this is the only way I found I could reach out to you.
+Thanks for keeping this RSS reader alive!
+Question: I'm pulling an RSS feed that is proxied by Cloudflare. Every now and then updates fail because CF wants to check the browser. 
+I saw you added userAgent string and I just tried to set it to my browser's user agent, which CF lets through. This didn't work. 
+I did enable JS in the embedded browser. Would you mind looking at it please? I can send you the feed URL by some other means.
