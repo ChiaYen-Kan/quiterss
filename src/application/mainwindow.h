@@ -482,7 +482,6 @@ private:
   void recountFeedCategories(const QList<int> &categoriesList);
   void creatFeedTab(int feedId, int feedParId);
   void initUpdateFeeds();
-  void addOurFeed();
 
   int addTab(NewsTabWidget *widget);
 

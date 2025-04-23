@@ -87,8 +87,6 @@ MainWindow::MainWindow(QWidget *parent)
 
   loadSettings();
 
-  addOurFeed();
-
   initUpdateFeeds();
 
   connect(this, SIGNAL(signalShowNotification(bool)),
@@ -7907,37 +7905,6 @@ void MainWindow::setStatusFeed(int feedId, QString status)
     feedsModel_->setData(indexStatus, status);
     feedsView_->viewport()->update();
   }
-}
-
-void MainWindow::addOurFeed()
-{
-  if (mainApp->dbFileExists()) return;
-
-  QPixmap icon(":/images/quiterss16");
-  QByteArray iconData;
-  QBuffer buffer(&iconData);
-  buffer.open(QIODevice::WriteOnly);
-  icon.save(&buffer, "PNG");
-  buffer.close();
-
-  QString xmlUrl = "https://quiterss.org/en/rss.xml";
-  if (mainApp->language() == "ru")
-    xmlUrl = "https://quiterss.org/ru/rss.xml";
-
-  QSqlQuery q;
-  q.prepare("INSERT INTO feeds(text, title, xmlUrl, htmlUrl, created, parentId, rowToParent, image) "
-            "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-  q.addBindValue("QuiteRSS");
-  q.addBindValue("QuiteRSS");
-  q.addBindValue(xmlUrl);
-  q.addBindValue("https://quiterss.org");
-  q.addBindValue(QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
-  q.addBindValue(0);
-  q.addBindValue(0);
-  q.addBindValue(iconData.toBase64());
-  q.exec();
-
-  feedsModelReload();
 }
 
 void MainWindow::createBackup()
