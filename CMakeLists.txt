@@ -57,15 +57,14 @@ find_package(Qt5LinguistTools REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Qt5 COMPONENTS LinguistTools REQUIRED)
 
+# complier and linker flags
+add_compile_options(-Wall -Wextra)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -flto")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3")
+
 # output name
 add_executable(${TARGET_NAME})
-
-# complier and linker flags
-
-set(CMAKE_CXX_FLAGS "-Wall")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -flto")
-set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -flto")
-set(CMAKE_CXX_FLAGS_DEBUG "-g3")
 
 # target_compile_definitions(${TARGET_NAME} PUBLIC
 #     HAVE_QT5
