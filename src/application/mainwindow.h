@@ -204,7 +204,8 @@ public:
   bool isOpeningLink_;  //!< Flag - link is being opened
   bool openLinkInBackgroundEmbedded_;
 
-  int externalBrowserOn_;
+  bool externalBrowserOn_;
+  bool otherExternalBrowserOn_;
   QString externalBrowser_;
   bool javaScriptEnable_;
   bool pluginsEnable_;

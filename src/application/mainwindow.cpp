@@ -1942,7 +1942,8 @@ void MainWindow::loadSettings()
 
   saveDBMemFileMiniSystemTray_ = settings.value("saveDBMemFileMiniSystemTray", true).toBool();
 
-  externalBrowserOn_ = settings.value("externalBrowserOn", 0).toInt();
+  externalBrowserOn_ = settings.value("externalBrowserOn", false).toBool();
+  otherExternalBrowserOn_ = settings.value("otherExternalBrowserOn", false).toBool();
   externalBrowser_ = settings.value("externalBrowser", "").toString();
   javaScriptEnable_ = settings.value("javaScriptEnable", true).toBool();
   pluginsEnable_ = settings.value("pluginsEnable", true).toBool();
@@ -3220,12 +3221,11 @@ void MainWindow::showOptionDlg(int index)
   optionsDialog_->numberRequests_->setValue(numberRequests);
   optionsDialog_->numberRepeats_->setValue(numberRepeats);
 
-  optionsDialog_->embeddedBrowserOn_->setChecked(externalBrowserOn_ <= 0);
-  optionsDialog_->externalBrowserOn_->setChecked(externalBrowserOn_ >= 1);
-  optionsDialog_->defaultExternalBrowserOn_->setChecked((externalBrowserOn_ == 0) ||
-                                                        (externalBrowserOn_ == 1));
-  optionsDialog_->otherExternalBrowserOn_->setChecked((externalBrowserOn_ == -1) ||
-                                                      (externalBrowserOn_ == 2));
+  optionsDialog_->embeddedBrowserOn_->setChecked(!externalBrowserOn_);
+  optionsDialog_->externalBrowserOn_->setChecked(externalBrowserOn_);
+
+  optionsDialog_->defaultExternalBrowserOn_->setChecked(!otherExternalBrowserOn_);
+  optionsDialog_->otherExternalBrowserOn_->setChecked(otherExternalBrowserOn_);
   optionsDialog_->otherExternalBrowserEdit_->setText(externalBrowser_);
   optionsDialog_->autoLoadImages_->setChecked(autoLoadImages_);
   optionsDialog_->javaScriptEnable_->setChecked(javaScriptEnable_);
@@ -3645,18 +3645,8 @@ void MainWindow::showOptionDlg(int index)
   settings.setValue("Settings/userAgent", userAgent);
   globals.setUserAgent(userAgent);
 
-  if (optionsDialog_->embeddedBrowserOn_->isChecked()) {
-    if (optionsDialog_->defaultExternalBrowserOn_->isChecked())
-      externalBrowserOn_ = 0;
-    else
-      externalBrowserOn_ = -1;
-  } else {
-    if (optionsDialog_->defaultExternalBrowserOn_->isChecked())
-      externalBrowserOn_ = 1;
-    else
-      externalBrowserOn_ = 2;
-  }
-
+  externalBrowserOn_ = optionsDialog_->externalBrowserOn_->isChecked();
+  otherExternalBrowserOn_ = optionsDialog_->otherExternalBrowserOn_->isChecked();
   externalBrowser_ = optionsDialog_->otherExternalBrowserEdit_->text();
   autoLoadImages_ = optionsDialog_->autoLoadImages_->isChecked();
   javaScriptEnable_ = optionsDialog_->javaScriptEnable_->isChecked();

@@ -187,6 +187,8 @@ private slots:
   void slotNewslLabelClicked(QModelIndex index);
 
 private:
+  void doNewsViewDoubleClicked(QModelIndex index, bool embedded_open);
+  void doLinkClicked(QUrl url, bool embedded_open);
   void createNewsList();
   void createWebWidget();
   QString getHtmlLabels(int row);
