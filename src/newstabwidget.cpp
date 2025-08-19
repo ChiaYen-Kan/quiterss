@@ -1653,16 +1653,16 @@ void NewsTabWidget::loadNewspaper(int refresh)
         iconStr = "qrc:/images/bulletUnread";
         titleStyle = "unread";
       }
-      QString readImg = QString("<a href=\"quiterss://read.action.ui?#%1\" title='%3'>"
-                                "<img class='quiterss-img' id=\"readAction%1\" src=\"%2\"/></a>").
+      QString readImg = QString("<a href=\"application://read.action.ui?#%1\" title='%3'>"
+                                "<img class=\"application-img\" id=\"readAction%1\" src=\"%2\"/></a>").
           arg(newsId).arg(iconStr).arg(tr("Mark Read/Unread"));
 
       QString feedImg;
       QByteArray byteArray = feedsModel_->dataField(feedIndex, "image").toByteArray();
       if (!byteArray.isEmpty())
-        feedImg = QString("<img class='quiterss-img' src=\"data:image/png;base64,") % byteArray % "\"/>";
+        feedImg = QString("<img class=\"application-img\" src=\"data:image/png;base64,") % byteArray % "\"/>";
       else
-        feedImg = QString("<img class='quiterss-img' src=\"qrc:/images/feed\"/>");
+        feedImg = QString("<img class=\"application-img\" src=\"qrc:/images/feed\"/>");
 
       QString titleString = newsModel_->dataField(index.row(), "title").toString();
       if (!linkString.isEmpty()) {
@@ -1790,24 +1790,24 @@ void NewsTabWidget::loadNewspaper(int refresh)
         iconStr = "qrc:/images/starOn";
       }
       QString starAction = QString("<div class=\"star-action\">"
-                                   "<a href=\"quiterss://star.action.ui?#%1\" title='%3'>"
-                                   "<img class='quiterss-img' id=\"starAction%1\" src=\"%2\"/></a></div>").
+                                   "<a href=\"application://star.action.ui?#%1\" title='%3'>"
+                                   "<img class=\"application-img\" id=\"starAction%1\" src=\"%2\"/></a></div>").
           arg(newsId).arg(iconStr).arg(tr("Mark News Star"));
       QString labelsMenu = QString("<div class=\"labels-menu\">"
-                                   "<a href=\"quiterss://labels.menu.ui?#%1\" title='%2'>"
-                                   "<img class='quiterss-img' id=\"labelsMenu%1\" src=\"qrc:/images/label_5\"/></a></div>").
+                                   "<a href=\"application://labels.menu.ui?#%1\" title='%2'>"
+                                   "<img class=\"application-img\" id=\"labelsMenu%1\" src=\"qrc:/images/label_5\"/></a></div>").
           arg(newsId).arg(tr("Label"));
       QString openBrowserAction = QString("<div class=\"open-browser\">"
-                                          "<a href=\"quiterss://open.browser.ui?#%1\" title='%2'>"
-                                          "<img class='quiterss-img' id=\"openBrowser%1\" src=\"qrc:/images/openBrowser\"/></a></div>").
+                                          "<a href=\"application://open.browser.ui?#%1\" title='%2'>"
+                                          "<img class=\"application-img\" id=\"openBrowser%1\" src=\"qrc:/images/openBrowser\"/></a></div>").
           arg(newsId).arg(tr("Open News in External Browser"));
       QString openHomeAction = QString("<div class=\"open-home\">"
-                                       "<a href=\"quiterss://open.home.ui?#%1\" title='%2'>"
-                                       "<img class='quiterss-img' id=\"openHome%1\" src=\"qrc:/images/homePageNewspaper\"/></a></div>").
+                                       "<a href=\"application://open.home.ui?#%1\" title='%2'>"
+                                       "<img class=\"application-img\" id=\"openHome%1\" src=\"qrc:/images/homePageNewspaper\"/></a></div>").
           arg(newsId).arg(tr("Open Homepage Feed"));
       QString deleteAction = QString("<div class=\"delete-action\">"
-                                     "<a href=\"quiterss://delete.action.ui?#%1\" title='%2'>"
-                                     "<img class='quiterss-img' id=\"deleteAction%1\" src=\"qrc:/images/delete\"/></a></div>").
+                                     "<a href=\"application://delete.action.ui?#%1\" title='%2'>"
+                                     "<img class=\"application-img\" id=\"deleteAction%1\" src=\"qrc:/images/delete\"/></a></div>").
           arg(newsId).arg(tr("Delete"));
       QString actionNews = starAction % labelsMenu %
           openBrowserAction %
@@ -2629,7 +2629,7 @@ QString NewsTabWidget::getHtmlLabels(int row)
     if (strLabelIdList.contains(item->text(2))) {
       strLabelIdList.removeOne(item->text(2));
       QByteArray byteArray = item->data(0, CategoriesTreeWidget::ImageRole).toByteArray();
-      labelsString.append(QString("<td><img class='quiterss-img' src=\"data:image/png;base64,") % byteArray.toBase64() % "\"/></td>");
+      labelsString.append(QString("<td><img class=\"application-img\" src=\"data:image/png;base64,") % byteArray.toBase64() % "\"/></td>");
       labelsString.append("<td>" % item->text(0));
       if (strLabelIdList.count())
         labelsString.append(",");

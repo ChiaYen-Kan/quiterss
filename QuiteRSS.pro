@@ -1,6 +1,10 @@
 # VCS revision info
 REVFILE = src/VersionRev.h
 QMAKE_DISTCLEAN += $$REVFILE
+APPLICATION_NAME="QuiteRss"
+ORGANIZATION_NAME="QuiteRss"
+PROJECT_NAME=quiterss
+
 exists(.git) {
   VERSION_REV = $$system(git rev-list --count HEAD)
   count(VERSION_REV, 1) {
@@ -13,10 +17,14 @@ exists(.git) {
   !build_pass:message(VCS revision: $$VERSION_REV VCS short hash:$$VERSION_HASH)
 
   os2|win32 {
-    system(echo $${LITERAL_HASH}define VCS_REVISION $$VERSION_REV > $$REVFILE)
+    system(echo $${LITERAL_HASH}define APPLICATION_NAME $$APPLICATION_NAME > $$REVFILE)
+    system(echo $${LITERAL_HASH}define ORGANIZATION_NAME $$ORGANIZATION_NAME >> $$REVFILE)
+    system(echo $${LITERAL_HASH}define VCS_REVISION $$VERSION_REV >> $$REVFILE)
     system(echo $${LITERAL_HASH}define VCS_SHORT_HASH $$VERSION_HASH >> $$REVFILE)
   } else {
-    system(echo \\$${LITERAL_HASH}define VCS_REVISION \\\"$$VERSION_REV\\\" > $$REVFILE)
+    system(echo \\$${LITERAL_HASH}define APPLICATION_NAME \\\"$$APPLICATION_NAME\\\" > $$REVFILE)
+    system(echo \\$${LITERAL_HASH}define ORGANIZATION_NAME \\\"$$ORGANIZATION_NAME\\\" >> $$REVFILE)
+    system(echo \\$${LITERAL_HASH}define VCS_REVISION \\\"$$VERSION_REV\\\" >> $$REVFILE)
     system(echo \\$${LITERAL_HASH}define VCS_SHORT_HASH \\\"$$VERSION_HASH\\\" >> $$REVFILE)
   }
 } else:!exists($$REVFILE) {
@@ -25,10 +33,14 @@ exists(.git) {
   !build_pass:message(VCS revision: $$VERSION_REV VCS short hash:$$VERSION_HASH)
 
   os2|win32 {
-    system(echo $${LITERAL_HASH}define VCS_REVISION $$VERSION_REV > $$REVFILE)
+    system(echo $${LITERAL_HASH}define APPLICATION_NAME $$APPLICATION_NAME > $$REVFILE)
+    system(echo $${LITERAL_HASH}define ORGANIZATION_NAME $$ORGANIZATION_NAME >> $$REVFILE)
+    system(echo $${LITERAL_HASH}define VCS_REVISION $$VERSION_REV >> $$REVFILE)
     system(echo $${LITERAL_HASH}define VCS_SHORT_HASH $$VERSION_HASH >> $$REVFILE)
   } else {
-    system(echo \\$${LITERAL_HASH}define VCS_REVISION \\\"$$VERSION_REV\\\" > $$REVFILE)
+    system(echo \\$${LITERAL_HASH}define APPLICATION_NAME \\\"$$APPLICATION_NAME\\\" > $$REVFILE)
+    system(echo \\$${LITERAL_HASH}define ORGANIZATION_NAME \\\"$$ORGANIZATION_NAME\\\" >> $$REVFILE)
+    system(echo \\$${LITERAL_HASH}define VCS_REVISION \\\"$$VERSION_REV\\\" >> $$REVFILE)
     system(echo \\$${LITERAL_HASH}define VCS_SHORT_HASH \\\"$$VERSION_HASH\\\" >> $$REVFILE)
   }
 }
@@ -232,11 +244,11 @@ include(lang/lang.pri)
 include(3rdparty/qupzilla/qupzilla.pri)
 
 os2|win32|mac {
-  TARGET = QuiteRSS
+  TARGET = $$APPLICATION_NAME
 }
 
 win32 {
-  RC_FILE = QuiteRSSApp.rc
+  RC_FILE = resources.rc
 }
 
 win32-g++ {
@@ -263,7 +275,7 @@ win32-msvc* {
 }
 
 os2 {
-  RC_FILE = quiterss_os2.rc
+  RC_FILE = resources_os2.rc
 }
 
 os2 {
@@ -278,37 +290,37 @@ os2|win32 {
 DISTFILES += \
     HISTORY_RU \
     HISTORY_EN \
-    COPYING \
+    LICENSE \
     AUTHORS \
     CHANGELOG \
     README.md
 
 unix:!mac {
-  TARGET = quiterss
+  TARGET = $$PROJECT_NAME
 
   isEmpty(PREFIX) {
     PREFIX =   /usr/local
   }
-  DATA_DIR = $$PREFIX/share/quiterss
+  DATA_DIR = $$PREFIX/share/$$PROJECT_NAME
   DEFINES += RESOURCES_DIR='\\\"$${DATA_DIR}\\\"'
 
   target.path =  $$quote($$PREFIX/bin)
 
-  desktop.files = quiterss.desktop
+  desktop.files = $$PROJECT_NAME.desktop
   desktop.path =  $$quote($$PREFIX/share/applications)
 
-  appdata.files = quiterss.appdata.xml
+  appdata.files = $$PROJECT_NAME.appdata.xml
   appdata.path =  $$quote($$PREFIX/share/metainfo)
 
-  target1.files = images/48x48/quiterss.png
+  target1.files = images/48x48/$$PROJECT_NAME.png
   target1.path =  $$quote($$PREFIX/share/pixmaps)
 
-  icon_16.files =  images/16x16/quiterss.png
-  icon_32.files =  images/32x32/quiterss.png
-  icon_48.files =  images/48x48/quiterss.png
-  icon_64.files =  images/64x64/quiterss.png
-  icon_128.files = images/128x128/quiterss.png
-  icon_256.files = images/256x256/quiterss.png
+  icon_16.files =  images/16x16/$$PROJECT_NAME.png
+  icon_32.files =  images/32x32/$$PROJECT_NAME.png
+  icon_48.files =  images/48x48/$$PROJECT_NAME.png
+  icon_64.files =  images/64x64/$$PROJECT_NAME.png
+  icon_128.files = images/128x128/$$PROJECT_NAME.png
+  icon_256.files = images/256x256/$$PROJECT_NAME.png
   icon_16.path =  $$quote($$PREFIX/share/icons/hicolor/16x16/apps)
   icon_32.path =  $$quote($$PREFIX/share/icons/hicolor/32x32/apps)
   icon_48.path =  $$quote($$PREFIX/share/icons/hicolor/48x48/apps)
@@ -336,10 +348,10 @@ mac {
   QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
 
   QMAKE_INFO_PLIST = Info.plist
-  ICON = quiterss.icns
+  ICON = $$PROJECT_NAME.icns
 
   bundle_target.files += AUTHORS
-  bundle_target.files += COPYING
+  bundle_target.files += LICENSE
   bundle_target.files += CHANGELOG
   bundle_target.files += README.md
   bundle_target.files += sound
@@ -355,19 +367,7 @@ mac {
 }
 
 RESOURCES += \
-    QuiteRSS.qrc
-
-CODECFORTR  = UTF-8
-CODECFORSRC = UTF-8
-
-OTHER_FILES += \
-    HISTORY_RU \
-    HISTORY_EN \
-    COPYING \
-    AUTHORS \
-    CHANGELOG \
-    INSTALL \
-    Info.plist
+  resources.qrc
 
 FORMS += \
     src/adblock/adblockdialog.ui \

@@ -31,7 +31,7 @@ td {
   font-size: %2pt;
 }
 
-img:not(.quiterss-img) {
+img:not(.application-img) {
   display: block;
   max-width: 100%;
   height: auto;

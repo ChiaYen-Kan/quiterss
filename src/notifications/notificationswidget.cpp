@@ -120,7 +120,7 @@ NotificationWidget::NotificationWidget(QList<int> idFeedList,
   if (blueColor < 0) blueColor = 0;
 
   iconTitle_ = new QLabel(this);
-  iconTitle_->setPixmap(QPixmap(":/images/quiterss16"));
+  iconTitle_->setPixmap(QPixmap(":/images/icon16"));
   iconTitle_->setStyleSheet("background: none;");
   textTitle_ = new QLabel(this);
   textTitle_->setStyleSheet("background: none;");

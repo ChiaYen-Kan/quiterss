@@ -41,8 +41,8 @@ MainApplication::MainApplication(int &argc, char **argv)
   , diskCache_(0)
   , downloadManager_(0)
 {
-  setApplicationName("QuiteRss");
-  setOrganizationName("QuiteRss");
+  setApplicationName(APPLICATION_NAME);
+  setOrganizationName(ORGANIZATION_NAME);
   setApplicationVersion(STRPRODUCTVER);
   globals.init();
 
@@ -64,7 +64,7 @@ MainApplication::MainApplication(int &argc, char **argv)
     }
   }
 
-  setWindowIcon(QIcon(":/images/quiterss128"));
+  setWindowIcon(QIcon(":/images/icon128"));
   setQuitOnLastWindowClosed(false);
 
   createSettings();
@@ -225,7 +225,7 @@ void MainApplication::connectDatabase()
   }
 
 #if defined(HAVE_X11)
-  fileName = "~/.local/share/data/QuiteRss/QuiteRss/feeds.db";
+  fileName = "~/.local/share/data/" ORGANIZATION_NAME "/" APPLICATION_NAME "/feeds.db";
   if (!QFile(dbFileName()).exists() && QFile(fileName).exists()) {
     QFile::copy(fileName, dbFileName());
   }
@@ -376,7 +376,7 @@ void MainApplication::setTranslateApplication()
   if (!translator_)
     translator_ = new QTranslator(this);
   removeTranslator(translator_);
-  translator_->load(resourcesDir() + QString("/lang/quiterss_%1").arg(langFileName_));
+  translator_->load(resourcesDir() + QString("/lang/%1").arg(langFileName_));
   installTranslator(translator_);
 
   if (!qt_translator_)

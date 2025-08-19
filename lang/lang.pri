@@ -1,17 +1,17 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
-TRANSLATIONS += lang/quiterss_de.ts lang/quiterss_ru.ts \
-                lang/quiterss_es.ts lang/quiterss_fr.ts lang/quiterss_hu.ts \
-                lang/quiterss_sv.ts lang/quiterss_sr.ts lang/quiterss_nl.ts \
-                lang/quiterss_fa.ts lang/quiterss_it.ts lang/quiterss_zh_CN.ts \
-                lang/quiterss_uk.ts lang/quiterss_cs.ts lang/quiterss_pl.ts \
-                lang/quiterss_ja.ts lang/quiterss_ko.ts lang/quiterss_pt_BR.ts \
-                lang/quiterss_lt.ts lang/quiterss_zh_TW.ts lang/quiterss_el_GR.ts \
-                lang/quiterss_tr.ts lang/quiterss_ar.ts lang/quiterss_sk.ts \
-                lang/quiterss_tg_TJ.ts lang/quiterss_pt_PT.ts lang/quiterss_vi.ts \
-                lang/quiterss_ro_RO.ts lang/quiterss_fi.ts lang/quiterss_gl.ts \
-                lang/quiterss_bg.ts lang/quiterss_hi.ts
+TRANSLATIONS += lang/de.ts lang/ru.ts \
+                lang/es.ts lang/fr.ts lang/hu.ts \
+                lang/sv.ts lang/sr.ts lang/nl.ts \
+                lang/fa.ts lang/it.ts lang/zh_CN.ts \
+                lang/uk.ts lang/cs.ts lang/pl.ts \
+                lang/ja.ts lang/ko.ts lang/pt_BR.ts \
+                lang/lt.ts lang/zh_TW.ts lang/el_GR.ts \
+                lang/tr.ts lang/ar.ts lang/sk.ts \
+                lang/tg_TJ.ts lang/pt_PT.ts lang/vi.ts \
+                lang/ro_RO.ts lang/fi.ts lang/gl.ts \
+                lang/bg.ts lang/hi.ts
 
 isEmpty(QMAKE_LRELEASE) {
   Q_OS_WIN:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\lrelease.exe

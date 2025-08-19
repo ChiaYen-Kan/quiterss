@@ -187,16 +187,16 @@ void OptionsDialog::acceptDialog()
 #if defined(Q_OS_WIN)
   if (mainApp->isPortableAppsCom()) {
     if (autoRunEnabled_->isChecked()) {
-      QFileInfo file(QCoreApplication::applicationDirPath() % "/../../QuiteRSSPortable.exe");
-      autoRunSettings_->setValue("QuiteRSSPortable", QDir::toNativeSeparators(file.absoluteFilePath()));
+      QFileInfo file(QCoreApplication::applicationDirPath() % "/../../" APPLICATION_NAME "Portable.exe");
+      autoRunSettings_->setValue(APPLICATION_NAME "Portable", QDir::toNativeSeparators(file.absoluteFilePath()));
     } else {
-      autoRunSettings_->remove("QuiteRSSPortable");
+      autoRunSettings_->remove(APPLICATION_NAME "Portable");
     }
   } else {
     if (autoRunEnabled_->isChecked())
-      autoRunSettings_->setValue("QuiteRSS", QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
+      autoRunSettings_->setValue(APPLICATION_NAME, QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
     else
-      autoRunSettings_->remove("QuiteRSS");
+      autoRunSettings_->remove(APPLICATION_NAME);
   }
 #endif
 
@@ -339,14 +339,14 @@ void OptionsDialog::createGeneralWidget()
   generalLayout->addSpacing(20);
 
 #if defined(Q_OS_WIN)
-  autoRunEnabled_ = new QCheckBox(tr("Run QuiteRSS at Windows startup"));
+  autoRunEnabled_ = new QCheckBox(tr("Run %1 at Windows startup").arg(APPLICATION_NAME));
   autoRunSettings_ = new QSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
                                    QSettings::NativeFormat);
   bool isAutoRun;
   if (mainApp->isPortableAppsCom())
-    isAutoRun = autoRunSettings_->value("QuiteRSSPortable", false).toBool();
+    isAutoRun = autoRunSettings_->value(APPLICATION_NAME "Portable", false).toBool();
   else
-    isAutoRun = autoRunSettings_->value("QuiteRSS", false).toBool();
+    isAutoRun = autoRunSettings_->value(APPLICATION_NAME, false).toBool();
   autoRunEnabled_->setChecked(isAutoRun);
 
   generalLayout->addWidget(autoRunEnabled_);
@@ -368,9 +368,9 @@ void OptionsDialog::createTraySystemWidget()
   showTrayIconBox_ = new QGroupBox(tr("Show system tray icon"));
   showTrayIconBox_->setCheckable(true);
 
-  startingTray_ = new QCheckBox(tr("starting QuiteRSS"));
-  minimizingTray_ = new QCheckBox(tr("minimizing QuiteRSS"));
-  closingTray_ = new QCheckBox(tr("closing QuiteRSS"));
+  startingTray_ = new QCheckBox(tr("starting %1").arg(APPLICATION_NAME));
+  minimizingTray_ = new QCheckBox(tr("minimizing %1").arg(APPLICATION_NAME));
+  closingTray_ = new QCheckBox(tr("closing %1").arg(APPLICATION_NAME));
   QVBoxLayout *moveTrayLayout = new QVBoxLayout();
   moveTrayLayout->setContentsMargins(15, 0, 5, 10);
   moveTrayLayout->addWidget(startingTray_);
