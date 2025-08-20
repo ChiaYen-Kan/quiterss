@@ -155,7 +155,8 @@ void RequestFeed::slotHead(const QUrl &getUrl, const int &id, const QString &fee
 
   qDebug() << objectName() << "::head:" << getUrl.toEncoded() << "feed:" << feedUrl << "countRepeats:" << count;
   QNetworkRequest request(getUrl);
-  request.setRawHeader("User-Agent", globals.userAgent().toUtf8());
+  request.setHeader(QNetworkRequest::UserAgentHeader, globals.userAgent().toUtf8());
+  request.setHeader(QNetworkRequest::IfModifiedSinceHeader, "Sat, 01 Jan 2000 00:00:00 GMT");
 
   currentUrls_.append(getUrl);
   currentIds_.append(id);
@@ -182,7 +183,8 @@ void RequestFeed::slotGet(const QUrl &getUrl, const int &id, const QString &feed
   qDebug() << objectName() << "::get:" << getUrl.toEncoded() << "feed:" << feedUrl << "countRepeats:" <<count;
   QNetworkRequest request(getUrl);
   request.setRawHeader("Accept", "application/atom+xml,application/rss+xml;q=0.9,application/xml;q=0.8,text/xml;q=0.7,*/*;q=0.6");
-  request.setRawHeader("User-Agent", globals.userAgent().toUtf8());
+  request.setHeader(QNetworkRequest::UserAgentHeader, globals.userAgent().toUtf8());
+  request.setHeader(QNetworkRequest::IfModifiedSinceHeader, "Sat, 01 Jan 2000 00:00:00 GMT");
 
   currentUrls_.append(getUrl);
   currentIds_.append(id);
