@@ -49,7 +49,7 @@ jobs:
           cp -rf build/lang/ ./dist/
       - name: Deploy - Qt
         run: |
-          windeployqt --no-opengl-sw --no-angle --no-system-d3d-compiler --force ./dist/QuiteRSS.exe
+          windeployqt-qt5 --no-opengl-sw --no-angle --no-system-d3d-compiler --force ./dist/QuiteRSS.exe
       - name: Deploy - mingw
         run: |
           cp $MSYSTEM_PREFIX/bin/libcrypto-*.dll ./dist/

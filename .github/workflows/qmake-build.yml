@@ -35,14 +35,15 @@ jobs:
           install: git make upx p7zip mingw-w64-${{matrix.env}}-toolchain mingw-w64-${{matrix.env}}-qt5 mingw-w64-${{matrix.env}}-qtwebkit mingw-w64-${{matrix.env}}-pkgconf
       - name: Configure
         run: |
-          qmake
+          qmake-qt5
           sed 's/windres -i/windres --codepage=65001 -i/g' -i Makefile.Release
           sed 's/-Wa,-mbig-obj//g' -i Makefile.Release
+          sed 's/lrelease/lrelease-qt5/g' -i Makefile.Release
       - name: Build
         run: make release -j$(grep -c ^processor /proc/cpuinfo)
       - name: Deploy - Qt
         run: |
-          windeployqt --no-opengl-sw --no-angle --no-system-d3d-compiler --force ./release/target/QuiteRSS.exe
+          windeployqt-qt5 --no-opengl-sw --no-angle --no-system-d3d-compiler --force ./release/target/QuiteRSS.exe
       - name: Deploy - mingw
         run: |
           cp $MSYSTEM_PREFIX/bin/libcrypto-*.dll ./release/target/

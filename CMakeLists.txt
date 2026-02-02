@@ -148,7 +148,7 @@ foreach(ts ${LANG_TS})
     add_custom_command(
         POST_BUILD
         TARGET ${TARGET_NAME}
-        COMMAND lrelease ${CMAKE_CURRENT_SOURCE_DIR}/lang/${ts}.ts -qm ${CMAKE_CURRENT_BINARY_DIR}/lang/${ts}.qm
+        COMMAND lrelease-qt5 ${CMAKE_CURRENT_SOURCE_DIR}/lang/${ts}.ts -qm ${CMAKE_CURRENT_BINARY_DIR}/lang/${ts}.qm
     )
 endforeach(ts)
 
