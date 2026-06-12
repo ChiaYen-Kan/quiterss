@@ -72,7 +72,8 @@ jobs:
         run: |
           7z a -mx=9 ${{ env.filename }}.7z ./release/target/*
       - name: Upload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
+          archive: false
           name: ${{ env.filename }}.7z
           path: ${{ env.filename }}.7z
