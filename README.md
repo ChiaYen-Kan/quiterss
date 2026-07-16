@@ -18,5 +18,3 @@ Links:
 * Git repository: https://github.com/QuiteRSS/quiterss
 * Issue tracker: https://github.com/QuiteRSS/quiterss/issues
 * Translations: https://www.transifex.com/projects/p/quiterss/
-
-[![Star History Chart](https://api.star-history.com/svg?repos=ChiaYen-Kan/quiterss&type=Date)](https://star-history.com/#ChiaYen-Kan/quiterss&Date)
