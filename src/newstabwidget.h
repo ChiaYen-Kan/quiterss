@@ -122,9 +122,6 @@ public:
 
   QWidget *newsWidget_;
   WebView *webView_;
-  QToolBar *webToolBar_;
-  LocationBar *locationBar_;
-  QWidget *webControlPanel_;
 
   QLabel *newsIconTitle_;
   QMovie *newsIconMovie_;
@@ -160,27 +157,20 @@ private slots:
   void slotMarkReadTimeout();
 
   void slotSetHtmlWebView(const QString &html);
-  void webHomePage();
-  void openPageInExternalBrowser();
   void slotLinkClicked(QUrl url);
   void slotLinkHovered(const QString &link, const QString &str1="", const QString &str2="");
   void slotSetValue(int value);
   void slotLoadStarted();
   void slotLoadFinished(bool);
-  void slotUrlEnter();
-  void slotUrlChanged(const QUrl &url);
   void showContextWebPage(const QPoint &p);
-  void openUrlInExternalBrowser();
 
   void slotTabClose();
   void webTitleChanged(QString title);
   void openLink();
-  void openLinkInNewTab();
 
   void slotFindText(const QString& text);
   void slotSelectFind();
 
-  void setWebToolbarVisible(bool show = true, bool checked = true);
   void setWebWidgetVisible();
 
   void slotNewslLabelClicked(QModelIndex index);
@@ -202,10 +192,6 @@ private:
   QWidget *webWidget_;
   QProgressBar *webViewProgress_;
   QLabel *webViewProgressLabel_;
-
-  QAction *webHomePageAct_;
-  QAction *webExternalBrowserAct_;
-  QAction *urlExternalBrowserAct_;
 
   QTimer *markNewsReadTimer_;
 
