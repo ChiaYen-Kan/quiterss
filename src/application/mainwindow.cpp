@@ -1069,22 +1069,10 @@ void MainWindow::createActions()
   reportProblemAct_->setObjectName("reportProblemAct_");
   connect(reportProblemAct_, SIGNAL(triggered()), this, SLOT(slotReportProblem()));
 
-  openInBrowserAct_ = new QAction(this);
-  openInBrowserAct_->setObjectName("openInBrowserAct");
-  this->addAction(openInBrowserAct_);
-
   openInExternalBrowserAct_ = new QAction(this);
   openInExternalBrowserAct_->setObjectName("openInExternalBrowserAct");
   openInExternalBrowserAct_->setIcon(QIcon(":/images/openBrowser"));
   this->addAction(openInExternalBrowserAct_);
-
-  openNewsNewTabAct_ = new QAction(this);
-  openNewsNewTabAct_->setObjectName("openInNewTabAct");
-  openNewsNewTabAct_->setIcon(QIcon(":/images/images/tab_go.png"));
-  this->addAction(openNewsNewTabAct_);
-  openNewsBackgroundTabAct_ = new QAction(this);
-  openNewsBackgroundTabAct_->setObjectName("openInBackgroundTabAct");
-  this->addAction(openNewsBackgroundTabAct_);
 
   markStarAct_ = new QAction(this);
   markStarAct_->setObjectName("markStarAct");
@@ -1365,14 +1353,8 @@ void MainWindow::createActions()
   connect(newsKeyPageDownAct_, SIGNAL(triggered()),
           this, SLOT(slotNewsPageDownPressed()));
 
-  connect(openInBrowserAct_, SIGNAL(triggered()),
-          this, SLOT(openInBrowserNews()));
   connect(openInExternalBrowserAct_, SIGNAL(triggered()),
           this, SLOT(openInExternalBrowserNews()));
-  connect(openNewsNewTabAct_, SIGNAL(triggered()),
-          this, SLOT(slotOpenNewsNewTab()));
-  connect(openNewsBackgroundTabAct_, SIGNAL(triggered()),
-          this, SLOT(slotOpenNewsBackgroundTab()));
 }
 // ---------------------------------------------------------------------------
 void MainWindow::createShortcut()
@@ -1435,14 +1417,8 @@ void MainWindow::createShortcut()
 
   listActions_.append(openDescriptionNewsAct_);
   openDescriptionNewsAct_->setShortcut(QKeySequence(Qt::Key_Return));
-  listActions_.append(openInBrowserAct_);
-  openInBrowserAct_->setShortcut(QKeySequence(Qt::Key_Space));
   listActions_.append(openInExternalBrowserAct_);
   openInExternalBrowserAct_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
-  openNewsNewTabAct_->setShortcut(QKeySequence(Qt::Key_T));
-  listActions_.append(openNewsNewTabAct_);
-  openNewsBackgroundTabAct_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_T));
-  listActions_.append(openNewsBackgroundTabAct_);
 
   switchFocusAct_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Tab));
   listActions_.append(switchFocusAct_);
@@ -1941,7 +1917,7 @@ void MainWindow::loadSettings()
 
   saveDBMemFileMiniSystemTray_ = settings.value("saveDBMemFileMiniSystemTray", true).toBool();
 
-  externalBrowserOn_ = settings.value("externalBrowserOn", 0).toInt();
+  externalBrowserOn_ = settings.value("externalBrowserOn", 1).toInt();
   externalBrowser_ = settings.value("externalBrowser", "").toString();
   javaScriptEnable_ = settings.value("javaScriptEnable", true).toBool();
   pluginsEnable_ = settings.value("pluginsEnable", true).toBool();
@@ -3219,8 +3195,6 @@ void MainWindow::showOptionDlg(int index)
   optionsDialog_->numberRequests_->setValue(numberRequests);
   optionsDialog_->numberRepeats_->setValue(numberRepeats);
 
-  optionsDialog_->embeddedBrowserOn_->setChecked(externalBrowserOn_ <= 0);
-  optionsDialog_->externalBrowserOn_->setChecked(externalBrowserOn_ >= 1);
   optionsDialog_->defaultExternalBrowserOn_->setChecked((externalBrowserOn_ == 0) ||
                                                         (externalBrowserOn_ == 1));
   optionsDialog_->otherExternalBrowserOn_->setChecked((externalBrowserOn_ == -1) ||
@@ -3644,17 +3618,10 @@ void MainWindow::showOptionDlg(int index)
   settings.setValue("Settings/userAgent", userAgent);
   globals.setUserAgent(userAgent);
 
-  if (optionsDialog_->embeddedBrowserOn_->isChecked()) {
-    if (optionsDialog_->defaultExternalBrowserOn_->isChecked())
-      externalBrowserOn_ = 0;
-    else
-      externalBrowserOn_ = -1;
-  } else {
-    if (optionsDialog_->defaultExternalBrowserOn_->isChecked())
-      externalBrowserOn_ = 1;
-    else
-      externalBrowserOn_ = 2;
-  }
+  if (optionsDialog_->defaultExternalBrowserOn_->isChecked())
+    externalBrowserOn_ = 1;
+  else
+    externalBrowserOn_ = 2;
 
   externalBrowser_ = optionsDialog_->otherExternalBrowserEdit_->text();
   autoLoadImages_ = optionsDialog_->autoLoadImages_->isChecked();
@@ -4769,13 +4736,8 @@ void MainWindow::retranslateStrings()
 
   openDescriptionNewsAct_->setText(tr("Open News"));
   openDescriptionNewsAct_->setToolTip(tr("Open News Description"));
-  openInBrowserAct_->setText(tr("Open in Browser"));
   openInExternalBrowserAct_->setText(tr("Open in External Browser"));
   openInExternalBrowserAct_->setToolTip(tr("Open News in External Browser"));
-  openNewsNewTabAct_->setText(tr("Open in New Tab"));
-  openNewsNewTabAct_->setToolTip(tr("Open News in New Tab"));
-  openNewsBackgroundTabAct_->setText(tr("Open in Background Tab"));
-  openNewsBackgroundTabAct_->setToolTip(tr("Open News in Background Tab"));
   markStarAct_->setText(tr("Star"));
   markStarAct_->setToolTip(tr("Mark News Star"));
   deleteNewsAct_->setText(tr("Delete"));
@@ -6454,26 +6416,9 @@ void MainWindow::restoreNews()
   currentNewsTab->restoreNews();
 }
 // ----------------------------------------------------------------------------
-void MainWindow::openInBrowserNews()
-{
-  currentNewsTab->openInBrowserNews();
-}
-// ----------------------------------------------------------------------------
 void MainWindow::openInExternalBrowserNews()
 {
   currentNewsTab->openInExternalBrowserNews();
-}
-// ----------------------------------------------------------------------------
-void MainWindow::slotOpenNewsNewTab()
-{
-  openNewsTab_ = NEW_TAB_FOREGROUND;
-  currentNewsTab->openNewsNewTab();
-}
-// ----------------------------------------------------------------------------
-void MainWindow::slotOpenNewsBackgroundTab()
-{
-  openNewsTab_ = NEW_TAB_BACKGROUND;
-  currentNewsTab->openNewsNewTab();
 }
 
 /** @brief Copy news URL-link

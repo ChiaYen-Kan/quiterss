@@ -74,8 +74,6 @@ public:
   LineEdit *editUserAgent_;
 
   // browser
-  QRadioButton *embeddedBrowserOn_;
-  QRadioButton *externalBrowserOn_;
   QRadioButton *defaultExternalBrowserOn_;
   QRadioButton *otherExternalBrowserOn_;
   LineEdit *otherExternalBrowserEdit_;

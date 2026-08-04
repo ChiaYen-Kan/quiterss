@@ -313,9 +313,7 @@ void NewsTabWidget::showContextMenuNews(const QPoint &pos)
   QMenu menu;
   menu.addAction(mainWindow_->restoreNewsAct_);
   menu.addSeparator();
-  menu.addAction(mainWindow_->openInBrowserAct_);
   menu.addAction(mainWindow_->openInExternalBrowserAct_);
-  menu.addAction(mainWindow_->openNewsNewTabAct_);
   menu.addSeparator();
   menu.addAction(mainWindow_->markNewsRead_);
   menu.addAction(mainWindow_->markAllNewsRead_);
@@ -526,11 +524,7 @@ void NewsTabWidget::setSettings(bool init, bool newTab)
       file.close();
     }
 
-    if (mainWindow_->externalBrowserOn_ <= 0) {
-      webView_->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    } else {
-      webView_->page()->setLinkDelegationPolicy(QWebPage::DelegateExternalLinks);
-    }
+    webView_->page()->setLinkDelegationPolicy(QWebPage::DelegateExternalLinks);
 
     webView_->page()->action(QWebPage::Back)->setShortcut(mainWindow_->backWebPageAct_->shortcut());
     webView_->page()->action(QWebPage::Forward)->setShortcut(mainWindow_->forwardWebPageAct_->shortcut());
@@ -1360,16 +1354,7 @@ void NewsTabWidget::updateWebView(QModelIndex index)
     showDescriptionNews_ = !displayNews.toInt();
 
   if (!showDescriptionNews_) {
-    if (mainWindow_->externalBrowserOn_ <= 0) {
-      locationBar_->setText(newsUrl.toString());
-      setWebToolbarVisible(true, false);
-
-      webView_->history()->setMaximumItemCount(0);
-      webView_->load(newsUrl);
-      webView_->history()->setMaximumItemCount(100);
-    } else {
-      openUrl(newsUrl);
-    }
+    openUrl(newsUrl);
   } else {
     setWebToolbarVisible(false, false);
 
@@ -1891,33 +1876,7 @@ void NewsTabWidget::slotLinkClicked(QUrl url)
     }
   }
 
-  if ((mainWindow_->externalBrowserOn_ <= 0) &&
-      (webView_->buttonClick_ != LEFT_BUTTON_ALT)) {
-    if (webView_->buttonClick_ == LEFT_BUTTON) {
-      if (!webControlPanel_->isVisible()) {
-        locationBar_->setText(url.toString());
-        setWebToolbarVisible(true, false);
-      }
-      webView_->load(url);
-    } else {
-      if ((webView_->buttonClick_ == MIDDLE_BUTTON) ||
-          (webView_->buttonClick_ == LEFT_BUTTON_CTRL)) {
-        mainWindow_->openNewsTab_ = NEW_TAB_BACKGROUND;
-      } else {
-        mainWindow_->openNewsTab_ = NEW_TAB_FOREGROUND;
-      }
-      if (!mainWindow_->openLinkInBackgroundEmbedded_) {
-        if (mainWindow_->openNewsTab_ == NEW_TAB_BACKGROUND)
-          mainWindow_->openNewsTab_ = NEW_TAB_FOREGROUND;
-        else
-          mainWindow_->openNewsTab_ = NEW_TAB_BACKGROUND;
-      }
-
-      mainWindow_->createWebTab(url);
-    }
-  } else {
-    openUrl(url);
-  }
+  openUrl(url);
 
   webView_->buttonClick_ = 0;
 }
@@ -2002,18 +1961,6 @@ void NewsTabWidget::webHomePage()
 void NewsTabWidget::openPageInExternalBrowser()
 {
   openUrl(webView_->url());
-}
-
-/** @brief Open news in browser
- *----------------------------------------------------------------------------*/
-void NewsTabWidget::openInBrowserNews()
-{
-  if (type_ >= TabTypeWeb) return;
-
-  int externalBrowserOn_ = mainWindow_->externalBrowserOn_;
-  mainWindow_->externalBrowserOn_ = 0;
-  slotNewsViewDoubleClicked(newsView_->currentIndex());
-  mainWindow_->externalBrowserOn_ = externalBrowserOn_;
 }
 
 /** @brief Open news in external browser
@@ -2318,10 +2265,8 @@ void NewsTabWidget::showContextWebPage(const QPoint &p)
     const QWebHitTestResult &hitTest = webView_->page()->mainFrame()->hitTestContent(p);
     if (!hitTest.linkUrl().isEmpty() && hitTest.linkUrl().scheme() != "javascript") {
       linkUrl_ = hitTest.linkUrl();
-      if (mainWindow_->externalBrowserOn_ <= 0) {
-        menu.addSeparator();
-        menu.addAction(urlExternalBrowserAct_);
-      }
+      menu.addSeparator();
+      menu.addAction(urlExternalBrowserAct_);
     } else if (pageMenu->actions().indexOf(webView_->pageAction(QWebPage::Reload)) >= 0) {
       if (webView_->title() == "news_descriptions") {
         webView_->pageAction(QWebPage::Reload)->setVisible(false);

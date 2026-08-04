@@ -83,7 +83,6 @@ public:
   void savePageAsDescript();
 
   bool openUrl(const QUrl &url);
-  void openInBrowserNews();
   void openInExternalBrowserNews();
   void openNewsNewTab();
 
