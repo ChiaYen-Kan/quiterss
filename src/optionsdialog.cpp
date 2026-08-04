@@ -527,8 +527,6 @@ void OptionsDialog::createNetworkConnectionsWidget()
 void OptionsDialog::createBrowserWidget()
 {
   //! tab "General"
-  embeddedBrowserOn_ = new QRadioButton(tr("Use embedded browser"));
-  externalBrowserOn_ = new QRadioButton(tr("Use external browser"));
   defaultExternalBrowserOn_ = new QRadioButton(tr("Default external browser"));
   otherExternalBrowserOn_ = new QRadioButton(tr("Following external browser:"));
 
@@ -550,14 +548,6 @@ void OptionsDialog::createBrowserWidget()
   QPushButton *userStyleBrowserButton = new QPushButton(tr("Browse..."));
   connect(userStyleBrowserButton, SIGNAL(clicked()),
           this, SLOT(selectionUserStyleBrowser()));
-
-  QGridLayout *browserSelectionLayout = new QGridLayout();
-  browserSelectionLayout->setContentsMargins(15, 0, 5, 10);
-  browserSelectionLayout->addWidget(embeddedBrowserOn_, 0, 0);
-  browserSelectionLayout->addWidget(externalBrowserOn_, 1, 0);
-  QButtonGroup *browserSelectionBox = new QButtonGroup();
-  browserSelectionBox->addButton(embeddedBrowserOn_);
-  browserSelectionBox->addButton(externalBrowserOn_);
 
   QGridLayout *externalBrowserLayout = new QGridLayout();
   externalBrowserLayout->setContentsMargins(15, 0, 5, 10);
@@ -588,8 +578,6 @@ void OptionsDialog::createBrowserWidget()
 
   QVBoxLayout *browserLayoutV = new QVBoxLayout();
   browserLayoutV->setContentsMargins(10, 10, 10, 10);
-  browserLayoutV->addWidget(new QLabel(tr("Browser selection:")));
-  browserLayoutV->addLayout(browserSelectionLayout);
   browserLayoutV->addWidget(new QLabel(tr("External browser:")));
   browserLayoutV->addLayout(externalBrowserLayout);
   browserLayoutV->addWidget(new QLabel(tr("Content:")));

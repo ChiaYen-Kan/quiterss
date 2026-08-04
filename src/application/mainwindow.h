@@ -108,10 +108,7 @@ public:
   QAction *statusBarToggle_;
   QAction *newsFilter_;
   QAction *openDescriptionNewsAct_;
-  QAction *openInBrowserAct_;
   QAction *openInExternalBrowserAct_;
-  QAction *openNewsNewTabAct_;
-  QAction *openNewsBackgroundTabAct_;
   QAction *markNewsRead_;
   QAction *markAllNewsRead_;
   QAction *markStarAct_;
@@ -367,10 +364,7 @@ private slots:
   void deleteNews();
   void deleteAllNewsList();
   void restoreNews();
-  void openInBrowserNews();
   void openInExternalBrowserNews();
-  void slotOpenNewsNewTab();
-  void slotOpenNewsBackgroundTab();
   void slotCopyLinkNews();
   void slotShowLabelsMenu();
   void slotPageUpWebView();
