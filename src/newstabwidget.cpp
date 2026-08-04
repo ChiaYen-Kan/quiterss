@@ -353,54 +353,10 @@ void NewsTabWidget::createWebWidget()
   progressLayout->addWidget(webViewProgressLabel_, 0, Qt::AlignLeft|Qt::AlignVCenter);
   webViewProgress_->setLayout(progressLayout);
 
-  //! Create web control panel
-  webToolBar_ = new QToolBar(this);
-  webToolBar_->setStyleSheet("QToolBar { border: none; padding: 0px; }");
-  webToolBar_->setIconSize(QSize(18, 18));
-
-  webHomePageAct_ = new QAction(this);
-  webHomePageAct_->setIcon(QIcon(":/images/homePage"));
-
-  webToolBar_->addAction(webHomePageAct_);
-  QAction *webAction = webView_->pageAction(QWebPage::Back);
-  webToolBar_->addAction(webAction);
-  webAction = webView_->pageAction(QWebPage::Forward);
-  webToolBar_->addAction(webAction);
-  webAction = webView_->pageAction(QWebPage::Reload);
-  webToolBar_->addAction(webAction);
-  webAction = webView_->pageAction(QWebPage::Stop);
-  webToolBar_->addAction(webAction);
-  webToolBar_->addSeparator();
-
-  webExternalBrowserAct_ = new QAction(this);
-  webExternalBrowserAct_->setIcon(QIcon(":/images/openBrowser"));
-  webToolBar_->addAction(webExternalBrowserAct_);
-
-  locationBar_ = new LocationBar(webView_, this);
-
-  QHBoxLayout *webControlPanelLayout = new QHBoxLayout();
-  webControlPanelLayout->setContentsMargins(2, 2, 2, 2);
-  webControlPanelLayout->setSpacing(2);
-  webControlPanelLayout->addWidget(webToolBar_);
-  webControlPanelLayout->addWidget(locationBar_, 1);
-
-  webControlPanel_ = new QWidget(this);
-  webControlPanel_->setObjectName("webControlPanel_");
-  webControlPanel_->setStyleSheet(
-        QString("#webControlPanel_ {border-bottom: 1px solid %1;}").
-        arg(qApp->palette().color(QPalette::Dark).name()));
-  webControlPanel_->setLayout(webControlPanelLayout);
-
-  if (type_ != TabTypeWeb)
-    setWebToolbarVisible(false, false);
-  else
-    setWebToolbarVisible(true, false);
-
   //! Create web layout
   QVBoxLayout *webLayout = new QVBoxLayout();
   webLayout->setContentsMargins(0, 0, 0, 0);
   webLayout->setSpacing(0);
-  webLayout->addWidget(webControlPanel_);
   webLayout->addWidget(webView_, 1);
   webLayout->addWidget(webViewProgress_);
 
@@ -412,17 +368,7 @@ void NewsTabWidget::createWebWidget()
   setWebWidgetVisible();
 
   webView_->page()->action(QWebPage::OpenLink)->disconnect();
-  webView_->page()->action(QWebPage::OpenLinkInNewWindow)->disconnect();
 
-  urlExternalBrowserAct_ = new QAction(this);
-  urlExternalBrowserAct_->setIcon(QIcon(":/images/openBrowser"));
-
-  connect(webHomePageAct_, SIGNAL(triggered()),
-          this, SLOT(webHomePage()));
-  connect(webExternalBrowserAct_, SIGNAL(triggered()),
-          this, SLOT(openPageInExternalBrowser()));
-  connect(urlExternalBrowserAct_, SIGNAL(triggered()),
-          this, SLOT(openUrlInExternalBrowser()));
   connect(this, SIGNAL(signalSetHtmlWebView(QString)),
           SLOT(slotSetHtmlWebView(QString)), Qt::QueuedConnection);
   connect(webView_, SIGNAL(loadStarted()), this, SLOT(slotLoadStarted()));
@@ -436,8 +382,6 @@ void NewsTabWidget::createWebWidget()
           this, SLOT(webTitleChanged(QString)));
   connect(webView_->page()->action(QWebPage::OpenLink), SIGNAL(triggered()),
           this, SLOT(openLink()));
-  connect(webView_->page()->action(QWebPage::OpenLinkInNewWindow), SIGNAL(triggered()),
-          this, SLOT(openLinkInNewTab()));
 
   connect(webView_, SIGNAL(showContextMenu(QPoint)),
           this, SLOT(showContextWebPage(QPoint)), Qt::QueuedConnection);
@@ -450,11 +394,6 @@ void NewsTabWidget::createWebWidget()
           this, SLOT(setWebToolbarVisible()));
   connect(mainWindow_->webWidgetVisibleAct_, SIGNAL(triggered()),
           this, SLOT(setWebWidgetVisible()));
-
-  connect(locationBar_, SIGNAL(returnPressed()),this, SLOT(slotUrlEnter()));
-  connect(webView_, SIGNAL(rssChanged(bool)), locationBar_, SLOT(showRssIcon(bool)));
-  connect(webView_, SIGNAL(urlChanged(QUrl)),
-          this, SLOT(slotUrlChanged(QUrl)), Qt::QueuedConnection);
 }
 
 /** @brief Read settings from ini-file
@@ -606,10 +545,6 @@ void NewsTabWidget::setSettings(bool init, bool newTab)
 void NewsTabWidget::retranslateStrings() {
   if (type_ != TabTypeDownloads) {
     webViewProgress_->setFormat(tr("Loading... (%p%)"));
-
-    webHomePageAct_->setText(tr("Home"));
-    webExternalBrowserAct_->setText(tr("Open Page in External Browser"));
-    urlExternalBrowserAct_->setText(tr("Open Link in External Browser"));
 
     if (type_ != TabTypeWeb) {
       findText_->retranslateStrings();
@@ -1356,8 +1291,6 @@ void NewsTabWidget::updateWebView(QModelIndex index)
   if (!showDescriptionNews_) {
     openUrl(newsUrl);
   } else {
-    setWebToolbarVisible(false, false);
-
     QString htmlStr;
     QString content = newsModel_->dataField(index.row(), "content").toString();
     if (!content.contains(QzRegExp("<html(.*)</html>", Qt::CaseInsensitive))) {
@@ -1554,7 +1487,6 @@ void NewsTabWidget::updateWebView(QModelIndex index)
 void NewsTabWidget::loadNewspaper(int refresh)
 {
   if (mainWindow_->newsLayout_ != 1) return;
-  setWebToolbarVisible(false, false);
   webView_->setUpdatesEnabled(false);
 
   int sortOrder = newsHeader_->sortIndicatorOrder();
@@ -1849,7 +1781,6 @@ void NewsTabWidget::hideWebContent()
   if (mainWindow_->newsLayout_ == 1) return;
 
   emit signalSetHtmlWebView();
-  setWebToolbarVisible(false, false);
 }
 
 void NewsTabWidget::slotLinkClicked(QUrl url)
@@ -1918,49 +1849,6 @@ void NewsTabWidget::slotLoadFinished(bool)
   }
 
   webViewProgress_->hide();
-}
-
-void NewsTabWidget::slotUrlEnter()
-{
-  webView_->setFocus();
-
-  if (!locationBar_->text().startsWith("http://") &&
-      !locationBar_->text().startsWith("https://")) {
-    locationBar_->setText("http://" + locationBar_->text());
-  }
-  locationBar_->setCursorPosition(0);
-
-  webView_->load(QUrl(locationBar_->text()));
-}
-
-void NewsTabWidget::slotUrlChanged(const QUrl &url)
-{
-  locationBar_->setText(url.toString());
-  locationBar_->setCursorPosition(0);
-}
-
-/** @brief Go to short news content
- *----------------------------------------------------------------------------*/
-void NewsTabWidget::webHomePage()
-{
-  if (type_ != TabTypeWeb) {
-    switch (mainWindow_->newsLayout_) {
-    case 1:
-      loadNewspaper();
-      break;
-    default:
-      updateWebView(newsView_->currentIndex());
-    }
-  } else {
-    webView_->history()->goToItem(webView_->history()->itemAt(0));
-  }
-}
-
-/** @brief Open current web page in external browser
- *----------------------------------------------------------------------------*/
-void NewsTabWidget::openPageInExternalBrowser()
-{
-  openUrl(webView_->url());
 }
 
 /** @brief Open news in external browser
@@ -2123,23 +2011,6 @@ void NewsTabWidget::openLink()
   slotLinkClicked(linkUrl_);
 }
 
-/** @brief Open link in new tab
- *----------------------------------------------------------------------------*/
-void NewsTabWidget::openLinkInNewTab()
-{
-  int externalBrowserOn_ = mainWindow_->externalBrowserOn_;
-  mainWindow_->externalBrowserOn_ = 0;
-
-  if (QApplication::keyboardModifiers() == Qt::NoModifier) {
-    webView_->buttonClick_ = MIDDLE_BUTTON;
-  } else {
-    webView_->buttonClick_ = MIDDLE_BUTTON_MOD;
-  }
-
-  slotLinkClicked(linkUrl_);
-  mainWindow_->externalBrowserOn_ = externalBrowserOn_;
-}
-
 /** @brief Open link in browser
  *----------------------------------------------------------------------------*/
 bool NewsTabWidget::openUrl(const QUrl &url)
@@ -2247,10 +2118,11 @@ void NewsTabWidget::showContextWebPage(const QPoint &p)
   QMenu menu;
   QMenu *pageMenu = webView_->page()->createStandardContextMenu();
   if (pageMenu) {
+    pageMenu->removeAction(webView_->page()->action(QWebPage::OpenLinkInNewWindow));
+
     menu.addActions(pageMenu->actions());
 
     webView_->page()->action(QWebPage::OpenLink)->setText(tr("Open Link"));
-    webView_->page()->action(QWebPage::OpenLinkInNewWindow)->setText(tr("Open in New Tab"));
     webView_->page()->action(QWebPage::DownloadLinkToDisk)->setText(tr("Save Link..."));
     webView_->page()->action(QWebPage::DownloadImageToDisk)->setText(tr("Save Image..."));
     webView_->page()->action(QWebPage::CopyLinkToClipboard)->setText(tr("Copy Link"));
@@ -2263,11 +2135,7 @@ void NewsTabWidget::showContextWebPage(const QPoint &p)
     webView_->page()->action(QWebPage::CopyImageUrlToClipboard)->setText(tr("Copy Image Address"));
 
     const QWebHitTestResult &hitTest = webView_->page()->mainFrame()->hitTestContent(p);
-    if (!hitTest.linkUrl().isEmpty() && hitTest.linkUrl().scheme() != "javascript") {
-      linkUrl_ = hitTest.linkUrl();
-      menu.addSeparator();
-      menu.addAction(urlExternalBrowserAct_);
-    } else if (pageMenu->actions().indexOf(webView_->pageAction(QWebPage::Reload)) >= 0) {
+    if (pageMenu->actions().indexOf(webView_->pageAction(QWebPage::Reload)) >= 0) {
       if (webView_->title() == "news_descriptions") {
         webView_->pageAction(QWebPage::Reload)->setVisible(false);
       } else {
@@ -2296,36 +2164,6 @@ void NewsTabWidget::showContextWebPage(const QPoint &p)
 
     menu.exec(webView_->mapToGlobal(p));
   }
-}
-
-/** @brief Open link in external browser
- *----------------------------------------------------------------------------*/
-void NewsTabWidget::openUrlInExternalBrowser()
-{
-  if (linkUrl_.scheme() == QLatin1String("mailto")) {
-    QDesktopServices::openUrl(linkUrl_);
-    return;
-  }
-
-  if (type_ != TabTypeWeb) {
-    if (linkUrl_.host().isEmpty() && newsView_->currentIndex().isValid()) {
-      int row = newsView_->currentIndex().row();
-      int feedId = newsModel_->dataField(row, "feedId").toInt();
-      QModelIndex feedIndex = feedsModel_->indexById(feedId);
-      QUrl hostUrl = feedsModel_->dataField(feedIndex, "htmlUrl").toString();
-
-      linkUrl_.setScheme(hostUrl.scheme());
-      linkUrl_.setHost(hostUrl.host());
-    }
-  }
-  openUrl(linkUrl_);
-}
-
-void NewsTabWidget::setWebToolbarVisible(bool show, bool checked)
-{
-  if (!checked) webToolbarShow_ = show;
-  webControlPanel_->setVisible(webToolbarShow_ &
-                               mainWindow_->browserToolbarToggle_->isChecked());
 }
 
 void NewsTabWidget::setWebWidgetVisible()

@@ -6262,9 +6262,8 @@ QWebPage *MainWindow::createWebTab(QUrl url)
   openNewsTab_ = 0;
 
   if (!url.isEmpty()) {
-      widget->locationBar_->setText(url.toString());
-      widget->webView_->load(url);
-    }
+    widget->webView_->load(url);
+  }
 
   return widget->webView_->page();
 }
@@ -7854,7 +7853,6 @@ void MainWindow::webViewFullScreen(bool on)
   pushButtonNull_->setVisible(!on);
   tabBarWidget_->setVisible(!on);
   currentNewsTab->newsWidget_->setVisible(!on);
-  currentNewsTab->webControlPanel_->setVisible(!on);
   pushButtonNull_->setVisible(!on);
   statusBar()->setVisible(!on);
   setFullScreen();
