@@ -64,8 +64,6 @@ qt5_wrap_cpp(
     ${CMAKE_CURRENT_SOURCE_DIR}/network/authenticationdialog.h
     ${CMAKE_CURRENT_SOURCE_DIR}/network/cookiejar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/network/networkmanager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/webview/locationbar.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/webview/rssdetectionwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/webview/webpage.h
     ${CMAKE_CURRENT_SOURCE_DIR}/webview/webview.h
     ${CMAKE_CURRENT_SOURCE_DIR}/database/database.h
@@ -134,8 +132,6 @@ target_sources(${TARGET_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/network/authenticationdialog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/network/cookiejar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/network/networkmanager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webview/locationbar.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/webview/rssdetectionwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/webview/webpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/webview/webview.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/database/database.cpp

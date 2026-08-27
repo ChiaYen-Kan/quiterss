@@ -103,8 +103,6 @@ HEADERS += \
     src/network/authenticationdialog.h \
     src/network/cookiejar.h \
     src/network/networkmanager.h \
-    src/webview/locationbar.h \
-    src/webview/rssdetectionwidget.h \
     src/webview/webpage.h \
     src/webview/webview.h \
     src/database/database.h \
@@ -172,8 +170,6 @@ SOURCES += \
     src/network/authenticationdialog.cpp \
     src/network/cookiejar.cpp \
     src/network/networkmanager.cpp \
-    src/webview/locationbar.cpp \
-    src/webview/rssdetectionwidget.cpp \
     src/webview/webpage.cpp \
     src/webview/webview.cpp \
     src/database/database.cpp \

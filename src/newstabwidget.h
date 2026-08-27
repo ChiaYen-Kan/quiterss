@@ -27,7 +27,6 @@
 #include "feedsview.h"
 #include "findtext.h"
 #include "lineedit.h"
-#include "locationbar.h"
 #include "newsheader.h"
 #include "newsmodel.h"
 #include "newsview.h"
