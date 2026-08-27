@@ -1322,13 +1322,6 @@ void MainWindow::createActions()
   this->addAction(settingPageLabelsAct_);
   connect(settingPageLabelsAct_, SIGNAL(triggered()), this, SLOT(showSettingPageLabels()));
 
-  backWebPageAct_ = new QAction(this);
-  backWebPageAct_->setObjectName("backWebPageAct");
-  forwardWebPageAct_ = new QAction(this);
-  forwardWebPageAct_->setObjectName("forwardWebPageAct");
-  reloadWebPageAct_ = new QAction(this);
-  reloadWebPageAct_->setObjectName("reloadWebPageAct");
-
   connect(markNewsRead_, SIGNAL(triggered()),
           this, SLOT(markNewsRead()));
   connect(markAllNewsRead_, SIGNAL(triggered()),
@@ -1470,9 +1463,6 @@ void MainWindow::createShortcut()
 
   listActions_.append(copyLinkAct_);
 
-  listActions_.append(backWebPageAct_);
-  listActions_.append(forwardWebPageAct_);
-  listActions_.append(reloadWebPageAct_);
   listActions_.append(pageUpWebViewAct_);
   listActions_.append(pageDownWebViewAct_);
 
@@ -3450,22 +3440,6 @@ void MainWindow::showOptionDlg(int index)
   pixmapColor.fill(notifierBackgroundColor_);
   optionsDialog_->colorsTree_->topLevelItem(22)->setIcon(0, pixmapColor);
   optionsDialog_->colorsTree_->topLevelItem(22)->setText(1, notifierBackgroundColor_);
-
-  NewsTabWidget *widget = (NewsTabWidget*)stackedWidget_->widget(TAB_WIDGET_PERMANENT);
-  backWebPageAct_->setText(widget->webView_->page()->action(QWebPage::Back)->text());
-  backWebPageAct_->setToolTip(widget->webView_->page()->action(QWebPage::Back)->toolTip() + " " + tr("(Browser)"));
-  backWebPageAct_->setIcon(widget->webView_->page()->action(QWebPage::Back)->icon());
-  backWebPageAct_->setShortcut(widget->webView_->page()->action(QWebPage::Back)->shortcut());
-
-  forwardWebPageAct_->setText(widget->webView_->page()->action(QWebPage::Forward)->text());
-  forwardWebPageAct_->setToolTip(widget->webView_->page()->action(QWebPage::Forward)->toolTip() + " " + tr("(Browser)"));
-  forwardWebPageAct_->setIcon(widget->webView_->page()->action(QWebPage::Forward)->icon());
-  forwardWebPageAct_->setShortcut(widget->webView_->page()->action(QWebPage::Forward)->shortcut());
-
-  reloadWebPageAct_->setText(widget->webView_->page()->action(QWebPage::Reload)->text());
-  reloadWebPageAct_->setToolTip(widget->webView_->page()->action(QWebPage::Reload)->toolTip() + " " + tr("(Browser)"));
-  reloadWebPageAct_->setIcon(widget->webView_->page()->action(QWebPage::Reload)->icon());
-  reloadWebPageAct_->setShortcut(widget->webView_->page()->action(QWebPage::Reload)->shortcut());
 
   optionsDialog_->loadActionShortcut(listActions_, &listDefaultShortcut_);
 
