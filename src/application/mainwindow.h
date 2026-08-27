@@ -140,9 +140,6 @@ public:
   QAction *closeOtherTabsAct_;
   QAction *closeAllTabsAct_;
   QAction *settingPageLabelsAct_;
-  QAction *backWebPageAct_;
-  QAction *forwardWebPageAct_;
-  QAction *reloadWebPageAct_;
 
   QActionGroup *newsFilterGroup_;
   QActionGroup *newsLabelGroup_;

@@ -463,10 +463,6 @@ void NewsTabWidget::setSettings(bool init, bool newTab)
 
     webView_->page()->setLinkDelegationPolicy(QWebPage::DelegateExternalLinks);
 
-    webView_->page()->action(QWebPage::Back)->setShortcut(mainWindow_->backWebPageAct_->shortcut());
-    webView_->page()->action(QWebPage::Forward)->setShortcut(mainWindow_->forwardWebPageAct_->shortcut());
-    webView_->page()->action(QWebPage::Reload)->setShortcut(mainWindow_->reloadWebPageAct_->shortcut());
-
     QWebSettings::setObjectCacheCapacities(0, 0, 0);
   }
 
