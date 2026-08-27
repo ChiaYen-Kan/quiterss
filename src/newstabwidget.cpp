@@ -390,8 +390,6 @@ void NewsTabWidget::createWebWidget()
 
   connect(mainWindow_->autoLoadImagesToggle_, SIGNAL(triggered()),
           this, SLOT(setAutoLoadImages()));
-  connect(mainWindow_->browserToolbarToggle_, SIGNAL(triggered()),
-          this, SLOT(setWebToolbarVisible()));
   connect(mainWindow_->webWidgetVisibleAct_, SIGNAL(triggered()),
           this, SLOT(setWebWidgetVisible()));
 }

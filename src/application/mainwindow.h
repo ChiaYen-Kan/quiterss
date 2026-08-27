@@ -102,7 +102,6 @@ public:
   NewsTabWidget *currentNewsTab;
 
   QAction *newsToolbarToggle_;
-  QAction *browserToolbarToggle_;
   QAction *webWidgetVisibleAct_;
   QAction *categoriesPanelToggle_;
   QAction *statusBarToggle_;

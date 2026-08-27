@@ -790,8 +790,6 @@ void MainWindow::createActions()
   feedsToolbarToggle_->setCheckable(true);
   newsToolbarToggle_ = new QAction(this);
   newsToolbarToggle_->setCheckable(true);
-  browserToolbarToggle_ = new QAction(this);
-  browserToolbarToggle_->setCheckable(true);
   categoriesPanelToggle_ = new QAction(this);
   categoriesPanelToggle_->setCheckable(true);
   statusBarToggle_ = new QAction(this);
@@ -1553,7 +1551,6 @@ void MainWindow::createMenu()
   toolbarsMenu_->addAction(mainToolbarToggle_);
   toolbarsMenu_->addAction(feedsToolbarToggle_);
   toolbarsMenu_->addAction(newsToolbarToggle_);
-  toolbarsMenu_->addAction(browserToolbarToggle_);
   toolbarsMenu_->addAction(categoriesPanelToggle_);
   toolbarsMenu_->addAction(statusBarToggle_);
 
@@ -1965,7 +1962,6 @@ void MainWindow::loadSettings()
   mainToolbarToggle_->setChecked(settings.value("mainToolbarShow2", false).toBool());
   feedsToolbarToggle_->setChecked(settings.value("feedsToolbarShow2", true).toBool());
   newsToolbarToggle_->setChecked(settings.value("newsToolbarShow", true).toBool());
-  browserToolbarToggle_->setChecked(settings.value("browserToolbarShow", true).toBool());
   categoriesPanelToggle_->setChecked(settings.value("categoriesPanelShow", true).toBool());
   categoriesWidget_->setVisible(categoriesPanelToggle_->isChecked());
   statusBarToggle_->setChecked(settings.value("statusBarShow", true).toBool());
@@ -2269,7 +2265,6 @@ void MainWindow::saveSettings()
   settings.setValue("mainToolbarShow2", mainToolbarToggle_->isChecked());
   settings.setValue("feedsToolbarShow2", feedsToolbarToggle_->isChecked());
   settings.setValue("newsToolbarShow", newsToolbarToggle_->isChecked());
-  settings.setValue("browserToolbarShow", browserToolbarToggle_->isChecked());
   settings.setValue("categoriesPanelShow", categoriesPanelToggle_->isChecked());
   settings.setValue("statusBarShow", statusBarToggle_->isChecked());
 
@@ -4852,7 +4847,6 @@ void MainWindow::retranslateStrings()
   mainToolbarToggle_->setText(tr("Main Toolbar"));
   feedsToolbarToggle_->setText(tr("Feeds Toolbar"));
   newsToolbarToggle_->setText(tr("News Toolbar"));
-  browserToolbarToggle_->setText(tr("Browser Toolbar"));
   categoriesPanelToggle_->setText(tr("Panel Categories"));
   statusBarToggle_->setText(tr("Status Bar"));
 
