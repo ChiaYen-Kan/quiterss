@@ -19,11 +19,9 @@
 #define MAINWINDOW_H
 
 #include <QtWidgets>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
 #include <QtSql>
 #include <QtWebKit>
-#include <QSound>
+#include <QSoundEffect>
 
 #include "categoriestreewidget.h"
 #include "feedsmodel.h"
@@ -323,9 +321,6 @@ private slots:
                                  QList<int> readList, QStringList labelList);
   void slotFeedsViewportUpdate();
   void slotPlaySoundNewNews();
-
-  void mediaStatusChanged(QMediaPlayer::MediaStatus status);
-  void mediaError(QMediaPlayer::Error error);
 
   void slotShowAboutDlg();
 
@@ -657,9 +652,6 @@ private:
 
   int openingFeedAction_;
   bool openNewsWebViewOn_;
-
-  QMediaPlayer *mediaPlayer_;
-  QMediaPlaylist *playlist_;
 
   bool soundNewNews_;
   QString soundNotifyPath_;

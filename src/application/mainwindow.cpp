@@ -54,7 +54,6 @@ MainWindow::MainWindow(QWidget *parent)
   , newsFilterAction_(NULL)
   , newsView_(NULL)
   , updateTimeCount_(0)
-  , mediaPlayer_(NULL)
   , notificationWidget(NULL)
   , feedIdOld_(-2)
   , isStartImportFeed_(false)
@@ -5752,52 +5751,17 @@ void MainWindow::slotPlaySound(const QString &path)
     return;
   }
 
-  bool playing = false;
-  Settings settings;
-  bool useMediaPlayer = settings.value("Settings/useMediaPlayer", true).toBool();
-
-  if (useMediaPlayer) {
-    if (mediaPlayer_ == NULL) {
-      playlist_ = new QMediaPlaylist(this);
-      mediaPlayer_ = new QMediaPlayer(this);
-      mediaPlayer_->setPlaylist(playlist_);
-      connect(mediaPlayer_, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
-              this, SLOT(mediaStatusChanged(QMediaPlayer::MediaStatus)));
-      connect(mediaPlayer_, SIGNAL(error(QMediaPlayer::Error)),
-              this, SLOT(mediaError(QMediaPlayer::Error)));
+  QSoundEffect *soundEffect = new QSoundEffect();
+  soundEffect->setSource(QUrl::fromLocalFile(soundPath));
+  soundEffect->setLoopCount(1);
+  soundEffect->setVolume(1);
+  soundEffect->play();
+  connect(soundEffect, &QSoundEffect::playingChanged, [soundEffect] () {
+    if (!soundEffect->isPlaying())
+    {
+      soundEffect->deleteLater();
     }
-
-    playlist_->addMedia(QUrl::fromLocalFile(soundPath));
-    if (playlist_->currentIndex() == -1) {
-      playlist_->setCurrentIndex(1);
-      mediaPlayer_->play();
-    }
-
-    playing = true;
-  }
-
-  if (!playing) {
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
-    QSound::play(soundPath);
-#else
-    QProcess::startDetached(QString("play %1").arg(soundPath));
-#endif
-  }
-}
-
-void MainWindow::mediaStatusChanged(QMediaPlayer::MediaStatus status)
-{
-  if (status == QMediaPlayer::EndOfMedia) {
-    playlist_->removeMedia(0);
-  }
-}
-
-void MainWindow::mediaError(QMediaPlayer::Error error)
-{
-  QTextCodec *codec = QTextCodec::codecForLocale();
-  qCritical() << QString("Error Media: %1 - %2").
-                 arg(error).
-                 arg(codec->toUnicode(mediaPlayer_->errorString().toUtf8()));
+  });
 }
 
 void MainWindow::slotPlaySoundNewNews()
