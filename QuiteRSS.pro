@@ -12,7 +12,7 @@ exists(.git) {
   }
   !build_pass:message(VCS revision: $$VERSION_REV VCS short hash:$$VERSION_HASH)
 
-  os2|win32 {
+  win32 {
     system(echo $${LITERAL_HASH}define VCS_REVISION $$VERSION_REV > $$REVFILE)
     system(echo $${LITERAL_HASH}define VCS_SHORT_HASH $$VERSION_HASH >> $$REVFILE)
   } else {
@@ -24,7 +24,7 @@ exists(.git) {
   VERSION_HASH = \"\"
   !build_pass:message(VCS revision: $$VERSION_REV VCS short hash:$$VERSION_HASH)
 
-  os2|win32 {
+  win32 {
     system(echo $${LITERAL_HASH}define VCS_REVISION $$VERSION_REV > $$REVFILE)
     system(echo $${LITERAL_HASH}define VCS_SHORT_HASH $$VERSION_HASH >> $$REVFILE)
   } else {
@@ -231,7 +231,7 @@ include(3rdparty/sqlite.pri)
 include(lang/lang.pri)
 include(3rdparty/qupzilla/qupzilla.pri)
 
-os2|win32|mac {
+win32|mac {
   TARGET = QuiteRSS
 }
 
@@ -262,16 +262,7 @@ win32-msvc* {
   QMAKE_CFLAGS += -D__PRETTY_FUNCTION__=__FUNCTION__
 }
 
-os2 {
-  RC_FILE = quiterss_os2.rc
-}
-
-os2 {
-  SOURCES += src/network/cabundleupdater.cpp
-  HEADERS += src/network/cabundleupdater.h
-}
-
-os2|win32 {
+win32 {
   RESOURCES += data/ca-bundle.qrc
 }
 

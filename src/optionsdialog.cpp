@@ -612,12 +612,6 @@ void OptionsDialog::createBrowserWidget()
   connect(otherExternalBrowserButton_, SIGNAL(clicked()),
           this, SLOT(selectionBrowser()));
 
-#if defined(Q_OS_OS2)
-  otherExternalBrowserOn_->setVisible(false);
-  otherExternalBrowserEdit_->setVisible(false);
-  otherExternalBrowserButton_->setVisible(false);
-#endif
-
   //! tab "History"
   maxPagesInCache_ = new QSpinBox();
   maxPagesInCache_->setRange(0, 20);

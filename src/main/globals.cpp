@@ -52,7 +52,7 @@ void Globals::init()
 #endif
 
   // Check Dir ...
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+#if defined(Q_OS_WIN)
   resourcesDir_ = QCoreApplication::applicationDirPath();
 #else
 #if defined(Q_OS_MAC)

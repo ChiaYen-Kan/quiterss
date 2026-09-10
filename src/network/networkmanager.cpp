@@ -24,9 +24,6 @@
 #include "adblockmanager.h"
 #include "webpage.h"
 #include "sslerrordialog.h"
-#if defined(Q_OS_OS2)
-#include "cabundleupdater.h"
-#endif
 
 #include <QNetworkReply>
 #include <QSslConfiguration>
@@ -88,10 +85,9 @@ NetworkManager::~NetworkManager()
 
 void NetworkManager::loadSettings()
 {
-#if defined(Q_OS_WIN) || defined(Q_OS_OS2)
+#if defined(Q_OS_WIN)
   QString certDir = mainApp->dataDir() + "/certificates";
   QString bundlePath = certDir + "/ca-bundle.crt";
-  QString bundleVersionPath = certDir + "/bundle_version";
 
   if (!QDir(certDir).exists()) {
     QDir dir;
@@ -101,11 +97,6 @@ void NetworkManager::loadSettings()
   if (!QFile::exists(bundlePath)) {
     QFile(":data/ca-bundle.crt").copy(bundlePath);
     QFile(bundlePath).setPermissions(QFile::ReadUser | QFile::WriteUser);
-
-#ifdef Q_OS_OS2
-    QFile(":data/bundle_version").copy(bundleVersionPath);
-    QFile(bundleVersionPath).setPermissions(QFile::ReadUser | QFile::WriteUser);
-#endif
   }
   QSslConfiguration::defaultConfiguration().setCaCertificates(QSslCertificate::fromPath(bundlePath));
 #else
@@ -164,10 +155,6 @@ void NetworkManager::loadCertificates()
   localCerts_ = QSslCertificate::fromPath(mainApp->dataDir() + "/certificates/*.crt", QSsl::Pem, QRegExp::Wildcard);
 #endif
   QSslConfiguration::defaultConfiguration().setCaCertificates(caCerts_ + localCerts_);
-
-#if defined(Q_OS_OS2)
-  new CaBundleUpdater(this, this);
-#endif
 }
 
 /** @brief Request authentification

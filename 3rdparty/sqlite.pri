@@ -4,7 +4,7 @@
 INCLUDEPATH += $$PWD \
                $$PWD/sqlitex
 
-os2|win32-msvc|mac {
+win32-msvc|mac {
   CONFIG(release, debug|release):DEFINES *= NDEBUG
   DEFINES += SQLITE_OMIT_LOAD_EXTENSION SQLITE_OMIT_COMPLETE
 
