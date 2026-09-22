@@ -51,7 +51,6 @@ public:
     TabTypeStar,
     TabTypeDel,
     TabTypeLabel,
-    TabTypeWeb,
     TabTypeDownloads
   };
 
@@ -163,7 +162,6 @@ private slots:
   void showContextWebPage(const QPoint &p);
 
   void slotTabClose();
-  void webTitleChanged(QString title);
   void openLink();
 
   void slotFindText(const QString& text);

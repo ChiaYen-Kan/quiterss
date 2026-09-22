@@ -2331,7 +2331,7 @@ void MainWindow::saveSettings()
 
   if (stackedWidget_->count()) {
     NewsTabWidget *widget;
-    if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb)
+    if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel)
       widget = currentNewsTab;
     else
       widget = (NewsTabWidget*)stackedWidget_->widget(TAB_WIDGET_PERMANENT);
@@ -2856,7 +2856,7 @@ void MainWindow::slotRecountCategoryCounts(QList<int> deletedList, QList<int> st
   categoriesTree_->topLevelItem(CategoriesTreeWidget::LabelsItem)->setFont(0, font);
 
   NewsTabWidget *widget = (NewsTabWidget*)stackedWidget_->widget(stackedWidget_->currentIndex());
-  if ((widget->type_ > NewsTabWidget::TabTypeFeed) && (widget->type_ < NewsTabWidget::TabTypeWeb)
+  if ((widget->type_ > NewsTabWidget::TabTypeFeed) && (widget->type_ <= NewsTabWidget::TabTypeLabel)
       && categoriesTree_->currentIndex().isValid()) {
     int unreadCount = widget->getUnreadCount(categoriesTree_->currentItem()->text(4));
     int allCount = widget->newsModel_->rowCount();
@@ -2986,7 +2986,7 @@ void MainWindow::slotFeedClicked(QModelIndex index)
 
   int feedIdCur = feedsModel_->idByIndex(feedsProxyModel_->mapToSource(index));
 
-  if (stackedWidget_->count() && currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+  if (stackedWidget_->count() && currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
     currentNewsTab->newsHeader_->saveStateColumns(currentNewsTab);
   }
 
@@ -3828,7 +3828,7 @@ void MainWindow::showOptionDlg(int index)
   mainApp->reloadUserStyleBrowser();
 
   if (currentNewsTab != NULL) {
-    if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb)
+    if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel)
       currentNewsTab->newsHeader_->saveStateColumns(currentNewsTab);
     currentNewsTab->setSettings(false);
   }
@@ -4160,7 +4160,7 @@ void MainWindow::setFeedsFilter(bool clicked)
 void MainWindow::setNewsFilter(QAction* pAct, bool clicked)
 {
   if (currentNewsTab == NULL) return;
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) {
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) {
     filterNewsAll_->setChecked(true);
     return;
   }
@@ -4278,7 +4278,7 @@ void MainWindow::setNewsFilter(QAction* pAct, bool clicked)
 void MainWindow::setFeedRead(int type, int feedId, FeedReedType feedReadType,
                              NewsTabWidget *widgetTab, int idException)
 {
-  if ((type >= NewsTabWidget::TabTypeWeb) || (type == NewsTabWidget::TabTypeDel))
+  if ((type >= NewsTabWidget::TabTypeDownloads) || (type == NewsTabWidget::TabTypeDel))
     return;
 
   if ((type == NewsTabWidget::TabTypeFeed) && (feedReadType != FeedReadSwitchingTab)) {
@@ -4303,7 +4303,7 @@ void MainWindow::setFeedRead(int type, int feedId, FeedReedType feedReadType,
     }
     for (int i = 0; i < stackedWidget_->count(); i++) {
       NewsTabWidget *widget = (NewsTabWidget*)stackedWidget_->widget(i);
-      if ((widget->type_ < NewsTabWidget::TabTypeWeb) &&
+      if ((widget->type_ <= NewsTabWidget::TabTypeLabel) &&
           !((feedReadType == FeedReadSwitchingFeed) && (i == TAB_WIDGET_PERMANENT))) {
         int row = widget->newsView_->currentIndex().row();
         int newsId = widget->newsModel_->index(row, widget->newsModel_->fieldIndex("id")).data().toInt();
@@ -5668,7 +5668,7 @@ void MainWindow::slotIconFeedUpdate(int feedId, QByteArray faviconData)
       widget->newsIconTitle_->setPixmap(iconTab);
     }
   }
-  if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb)
+  if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel)
     currentNewsTab->newsView_->viewport()->update();
 }
 // ----------------------------------------------------------------------------
@@ -5969,7 +5969,7 @@ void MainWindow::setStyleApp(QAction *pAct)
 
   mainApp->reloadUserStyleBrowser();
   if (currentNewsTab != NULL) {
-    if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb)
+    if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel)
       currentNewsTab->newsHeader_->saveStateColumns(currentNewsTab);
     currentNewsTab->setSettings(false);
   }
@@ -6005,7 +6005,7 @@ void MainWindow::slotSwitchPrevFocus()
  *---------------------------------------------------------------------------*/
 void MainWindow::slotOpenFeedNewTab()
 {
-  if (stackedWidget_->count() && currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+  if (stackedWidget_->count() && currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
     setFeedRead(currentNewsTab->type_, currentNewsTab->feedId_, FeedReadSwitchingTab, currentNewsTab);
     currentNewsTab->newsHeader_->saveStateColumns(currentNewsTab);
     Settings settings;
@@ -6060,7 +6060,7 @@ void MainWindow::slotTabCurrentChanged(int index)
 
   NewsTabWidget *widget = (NewsTabWidget*)stackedWidget_->widget(index);
 
-  if ((widget->type_ == NewsTabWidget::TabTypeFeed) || (widget->type_ >= NewsTabWidget::TabTypeWeb))
+  if ((widget->type_ == NewsTabWidget::TabTypeFeed) || (widget->type_ >= NewsTabWidget::TabTypeDownloads))
     categoriesTree_->setCurrentIndex(QModelIndex());
   if (widget->type_ != NewsTabWidget::TabTypeFeed) {
     feedsView_->setCurrentIndex(QModelIndex());
@@ -6081,7 +6081,7 @@ void MainWindow::slotTabCurrentChanged(int index)
 
   if (!updateCurrentTab_) return;
 
-  if ((tabBar_->closingTabState_ == TabBar::CloseTabIdle) && (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb)) {
+  if ((tabBar_->closingTabState_ == TabBar::CloseTabIdle) && (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel)) {
     setFeedRead(currentNewsTab->type_, currentNewsTab->feedId_, FeedReadSwitchingTab, currentNewsTab);
 
     currentNewsTab->newsHeader_->saveStateColumns(currentNewsTab);
@@ -6114,13 +6114,6 @@ void MainWindow::slotTabCurrentChanged(int index)
 
     statusUnread_->setVisible(widget->feedId_);
     statusAll_->setVisible(widget->feedId_);
-  } else if (widget->type_ == NewsTabWidget::TabTypeWeb) {
-    statusUnread_->setVisible(false);
-    statusAll_->setVisible(false);
-    currentNewsTab = widget;
-    currentNewsTab->setSettings(false);
-    currentNewsTab->retranslateStrings();
-    currentNewsTab->webView_->setFocus();
   } else if (widget->type_ == NewsTabWidget::TabTypeDownloads) {
     statusUnread_->setVisible(false);
     statusAll_->setVisible(false);
@@ -6211,30 +6204,6 @@ void MainWindow::setBrowserPosition(QAction *action)
   currentNewsTab->setBrowserPosition();
 }
 
-/** @brief Create tab with browser only (without news list)
- *---------------------------------------------------------------------------*/
-QWebPage *MainWindow::createWebTab(QUrl url)
-{
-  NewsTabWidget *widget = new NewsTabWidget(this, NewsTabWidget::TabTypeWeb);
-  int indexTab = addTab(widget);
-  widget->setTextTab(tr("Loading..."));
-
-  if (openNewsTab_ == NEW_TAB_FOREGROUND) {
-    currentNewsTab = widget;
-    emit signalSetCurrentTab(indexTab);
-  }
-
-  widget->setSettings();
-  widget->retranslateStrings();
-
-  openNewsTab_ = 0;
-
-  if (!url.isEmpty()) {
-    widget->webView_->load(url);
-  }
-
-  return widget->webView_->page();
-}
 // ----------------------------------------------------------------------------
 void MainWindow::creatFeedTab(int feedId, int feedParId)
 {
@@ -6447,7 +6416,7 @@ void MainWindow::setCurrentTab(int index, bool updateCurrentTab)
  *---------------------------------------------------------------------------*/
 void MainWindow::findText()
 {
-  if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+  if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
     if (!currentNewsTab->findText_->hasFocus())
       currentNewsTab->findText_->setFocus();
     else
@@ -6576,7 +6545,7 @@ void MainWindow::slotOpenNew(int feedId, int newsId)
   feedsModel_->setData(feedsModel_->indexSibling(feedIndex, "currentNews"),
                            newsId);
 
-  if (stackedWidget_->count() && currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+  if (stackedWidget_->count() && currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
     currentNewsTab->newsHeader_->saveStateColumns(currentNewsTab);
   }
 
@@ -6636,7 +6605,7 @@ void MainWindow::slotMarkReadNewsInNotification(int feedId, int newsId, int read
 {
   QSqlQuery q;
   bool showNews = false;
-  if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+  if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
     int cnt = newsModel_->rowCount();
     for (int i = 0; i < cnt; ++i) {
       if (newsId == newsModel_->index(i, newsModel_->fieldIndex("id")).data().toInt()) {
@@ -6684,7 +6653,7 @@ void MainWindow::slotDeleteNewsInNotification(int feedId, int newsId)
                arg(QDateTime::currentDateTime().toString(Qt::ISODate)).
                arg(newsId));
 
-  if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+  if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
     for (int i = 0; i < newsModel_->rowCount(); ++i) {
       if (newsId == newsModel_->index(i, newsModel_->fieldIndex("id")).data().toInt()) {
         newsModel_->setData(newsModel_->index(i, newsModel_->fieldIndex("new")), 0);
@@ -6724,7 +6693,7 @@ void MainWindow::slotMarkAllReadNewsInNotification()
     QList<int> idFeedList = notificationWidget->idFeedList();
     QList<int> idNewsList = notificationWidget->idNewsList();
 
-    if (currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+    if (currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
       for (int i = 0; i < newsModel_->rowCount(); ++i) {
         if (idNewsList.contains(newsModel_->index(i, newsModel_->fieldIndex("id")).data().toInt())) {
           newsModel_->setData(
@@ -6977,7 +6946,7 @@ void MainWindow::slotMoveIndex(const QModelIndex &indexWhere, int how)
  *---------------------------------------------------------------------------*/
 void MainWindow::slotCategoriesClicked(QTreeWidgetItem *item, int, bool createTab)
 {
-  if (stackedWidget_->count() && currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+  if (stackedWidget_->count() && currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
     currentNewsTab->newsHeader_->saveStateColumns(currentNewsTab);
     Settings settings;
     settings.setValue("NewsTabSplitterState", currentNewsTab->newsTabWidgetSplitter_->saveState());
@@ -7238,7 +7207,7 @@ void MainWindow::feedsSplitterMoved(int pos, int)
  *---------------------------------------------------------------------------*/
 void MainWindow::setLabelNews(QAction *action)
 {
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) return;
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) return;
 
   newsLabelAction_->setIcon(action->icon());
   newsLabelAction_->setToolTip(action->text());
@@ -7251,7 +7220,7 @@ void MainWindow::setLabelNews(QAction *action)
  *---------------------------------------------------------------------------*/
 void MainWindow::setDefaultLabelNews()
 {
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) return;
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) return;
 
   currentNewsTab->setLabelNews(newsLabelAction_->data().toInt());
 }
@@ -7264,7 +7233,7 @@ void MainWindow::getLabelNews()
     newsLabelGroup_->actions().at(i)->setChecked(false);
   }
 
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) return;
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) return;
 
   QList<QModelIndex> indexes = newsView_->selectionModel()->selectedRows(
         newsModel_->fieldIndex("label"));
@@ -7423,7 +7392,7 @@ void MainWindow::restoreLastNews()
  *---------------------------------------------------------------------------*/
 void MainWindow::nextUnreadNews()
 {
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) return;
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) return;
   newsView_->clearSelection();
 
   int newsRow = currentNewsTab->findUnreadNews(true);
@@ -7486,7 +7455,7 @@ void MainWindow::nextUnreadNews()
  *---------------------------------------------------------------------------*/
 void MainWindow::prevUnreadNews()
 {
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) return;
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) return;
   newsView_->clearSelection();
 
   int newsRow = currentNewsTab->findUnreadNews(false);
@@ -7565,7 +7534,6 @@ void MainWindow::showCustomizeToolbarDlg(QAction *action)
   if (action->objectName() == "customizeFeedsToolbarAct") {
     toolbar = feedsToolBar_;
   } else if (action->objectName() == "customizeNewsToolbarAct") {
-    if (currentNewsTab->type_ == NewsTabWidget::TabTypeWeb) return;
     if (currentNewsTab->type_ == NewsTabWidget::TabTypeDownloads) return;
     toolbar = currentNewsTab->newsToolBar_;
   }
@@ -7633,12 +7601,12 @@ void MainWindow::sortedByTitleFeedsTree()
 void MainWindow::showNewsMenu()
 {
   if (currentNewsTab)
-    newsSortByMenu_->setEnabled(currentNewsTab->type_ < NewsTabWidget::TabTypeWeb);
+    newsSortByMenu_->setEnabled(currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel);
 }
 // ----------------------------------------------------------------------------
 void MainWindow::showNewsSortByMenu()
 {
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) return;
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) return;
 
   QListIterator<QAction *> iter(newsSortByColumnGroup_->actions());
   while (iter.hasNext()) {
@@ -7671,7 +7639,7 @@ void MainWindow::showNewsSortByMenu()
 // ----------------------------------------------------------------------------
 void MainWindow::setNewsSortByColumn()
 {
-  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeWeb) return;
+  if (currentNewsTab->type_ >= NewsTabWidget::TabTypeDownloads) return;
 
   int lIdx = newsSortByColumnGroup_->checkedAction()->data().toInt();
   if (newsSortOrderGroup_->actions().at(0)->isChecked()) {

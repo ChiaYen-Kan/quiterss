@@ -65,7 +65,6 @@ private slots:
   void enableAdBlock(bool state);
 
   void aboutToShowMenu();
-  void learnAboutRules();
 
   void loadSubscriptions();
   void load();

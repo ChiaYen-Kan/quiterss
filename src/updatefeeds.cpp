@@ -626,7 +626,7 @@ void UpdateObject::finishUpdate(int feedId, bool changed, int newCount, QString 
         }
         emit signalCountsStatusBar(unreadCount, allCount);
       }
-    } else if (mainWindow_->currentNewsTab->type_ < NewsTabWidget::TabTypeWeb) {
+    } else if (mainWindow_->currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel) {
       if (!timerUpdateNews_->isActive())
         timerUpdateNews_->start(1000);
     }
@@ -1168,7 +1168,7 @@ void UpdateObject::slotMarkAllFeedsOld()
   }
   slotRecountCategoryCounts();
 
-  if ((mainWindow_->currentNewsTab != NULL) && (mainWindow_->currentNewsTab->type_ < NewsTabWidget::TabTypeWeb)) {
+  if ((mainWindow_->currentNewsTab != NULL) && (mainWindow_->currentNewsTab->type_ <= NewsTabWidget::TabTypeLabel)) {
     emit signalUpdateNews(NewsTabWidget::RefreshWithPos);
   }
 

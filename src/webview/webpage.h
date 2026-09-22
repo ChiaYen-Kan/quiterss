@@ -59,7 +59,6 @@ public:
   bool containsRejectedCerts(const QList<QSslCertificate> &certs);
 
 protected slots:
-  QWebPage *createWindow(WebWindowType type);
   void handleUnsupportedContent(QNetworkReply* reply);
 
 private slots:
