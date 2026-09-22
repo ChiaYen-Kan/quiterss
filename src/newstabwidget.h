@@ -83,7 +83,6 @@ public:
 
   bool openUrl(const QUrl &url);
   void openInExternalBrowserNews();
-  void openNewsNewTab();
 
   void updateWebView(QModelIndex index);
   void loadNewspaper(int refresh = RefreshAll);
