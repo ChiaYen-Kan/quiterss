@@ -77,8 +77,6 @@ AdBlockDialog::AdBlockDialog(QWidget* parent)
   m_actionAddSubscription = menu->addAction(tr("Add Subscription"), this, SLOT(addSubscription()));
   m_actionRemoveSubscription = menu->addAction(tr("Remove Subscription"), this, SLOT(removeSubscription()));
   menu->addAction(tr("Update Subscriptions"), m_manager, SLOT(updateAllSubscriptions()));
-  menu->addSeparator();
-  menu->addAction(tr("Learn about writing rules..."), this, SLOT(learnAboutRules()));
 
   buttonOptions->setMenu(menu);
   connect(menu, SIGNAL(aboutToShow()), this, SLOT(aboutToShowMenu()));
@@ -181,12 +179,6 @@ void AdBlockDialog::aboutToShowMenu()
   m_actionAddRule->setEnabled(subscriptionEditable);
   m_actionRemoveRule->setEnabled(subscriptionEditable);
   m_actionRemoveSubscription->setEnabled(subscriptionRemovable);
-}
-
-void AdBlockDialog::learnAboutRules()
-{
-  mainApp->mainWindow()->openNewsTab_ = NEW_TAB_FOREGROUND;
-  mainApp->mainWindow()->createWebTab(QUrl("https://adblockplus.org/en/filters"));
 }
 
 void AdBlockDialog::loadSubscriptions()

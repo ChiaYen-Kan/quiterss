@@ -78,13 +78,6 @@ bool WebPage::acceptNavigationRequest(QWebFrame *frame,
   return QWebPage::acceptNavigationRequest(frame,request,type);
 }
 
-QWebPage *WebPage::createWindow(WebWindowType type)
-{
-  Q_UNUSED(type)
-
-  return mainApp->mainWindow()->createWebTab();
-}
-
 void WebPage::scheduleAdjustPage()
 {
   WebView* webView = qobject_cast<WebView*>(view());
