@@ -1967,37 +1967,6 @@ void NewsTabWidget::webTitleChanged(QString title)
   }
 }
 
-/** @brief Open news in new tab
- *----------------------------------------------------------------------------*/
-void NewsTabWidget::openNewsNewTab()
-{
-  if (type_ >= TabTypeWeb) return;
-
-  QList<QModelIndex> indexes = newsView_->selectionModel()->selectedRows(0);
-
-  int cnt = indexes.count();
-  if (cnt == 0) return;
-
-  for (int i = cnt-1; i >= 0; --i) {
-    QModelIndex index = indexes.at(i);
-    int row = index.row();
-    if (mainWindow_->markNewsReadOn_ && mainWindow_->markCurNewsRead_)
-      slotSetItemRead(index, 1);
-
-    QUrl url = QUrl::fromEncoded(getLinkNews(row).toUtf8());
-    if (url.host().isEmpty() || (QUrl(url).host().indexOf('.') == -1)) {
-      int feedId = newsModel_->dataField(row, "feedId").toInt();
-      QModelIndex feedIndex = feedsModel_->indexById(feedId);
-      QUrl hostUrl = feedsModel_->dataField(feedIndex, "htmlUrl").toString();
-
-      url.setScheme(hostUrl.scheme());
-      url.setHost(hostUrl.host());
-    }
-
-    mainWindow_->createWebTab(url);
-  }
-}
-
 /** @brief Open link
  *----------------------------------------------------------------------------*/
 void NewsTabWidget::openLink()
