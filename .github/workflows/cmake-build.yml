@@ -20,10 +20,8 @@ jobs:
         shell: msys2 {0}
     strategy:
       matrix:
-        sys: [mingw64, ucrt64]
+        sys: [ucrt64]
         include:
-        - sys: mingw64
-          env: x86_64
         - sys: ucrt64
           env: ucrt-x86_64
     steps:

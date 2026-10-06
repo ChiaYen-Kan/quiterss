@@ -20,8 +20,10 @@ jobs:
         shell: msys2 {0}
     strategy:
       matrix:
+        sys: [ucrt64]
         include:
-          - { sys: mingw64, env: x86_64 }
+        - sys: ucrt64
+          env: ucrt-x86_64
     steps:
       - name: Checkout branch
         uses: actions/checkout@v6
