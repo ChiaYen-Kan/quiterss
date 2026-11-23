@@ -1,7 +1,7 @@
 ##
 ## Bundle of CA Root Certificates
 ##
-## Certificate data from Mozilla as of: Mon Nov  9 04:49:55 2026 GMT
+## Certificate data from Mozilla as of: Mon Nov 23 05:56:00 2026 GMT
 ##
 ## Find updated versions here: https://curl.se/docs/caextract.html
 ##
@@ -18,7 +18,9 @@
 ## Conversion done with mk-ca-bundle.pl version 1.35.
 ## SHA256: 3ec2b4d240dc12c747eaf450061db84af757c483bbda302f9e29ceb5d70be510
 ##
-
+## This file is subject to the terms of the Mozilla Public License, v. 2.0.
+## https://mozilla.org/MPL/2.0/
+##
 
 COMODO ECC Certification Authority
 ==================================
